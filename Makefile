@@ -6,7 +6,7 @@
 # Configuration
 # ---------------------------------------------------------
 
-ROOT := $(GITHUB_WORKSPACE)
+ROOT := $(shell pwd)
 
 MAN_DIR          := man
 MANPAGE          := $(MAN_DIR)/rr2graph.1

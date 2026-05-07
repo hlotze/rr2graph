@@ -32,10 +32,11 @@ jobs:
           pipenv install --dev --python $(which python)
 
       - name: Install rr2graph (editable)
+        working-directory: ${{ github.workspace }}
         run: pipenv run pip install -e .
 
       - name: Run CI pipeline (lint, style, tests)
-        working-directory: ${{ github.workspace }
+        working-directory: ${{ github.workspace }}
         run: make ci
 
       - name: Upload coverage report
@@ -43,5 +44,3 @@ jobs:
         with:
           name: coverage-html
           path: htmlcov
-
-

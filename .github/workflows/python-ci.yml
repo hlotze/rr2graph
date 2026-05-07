@@ -10,6 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      PIPENV_PIPFILE: ${{ github.workspace }}/Pipfile
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,7 +36,6 @@ jobs:
         run: pipenv run pip install -e .
 
       - name: Run CI pipeline (lint, style, tests)
-        working-directory: ${{ github.workspace }}/rr2graph
         run: make ci
 
       - name: Upload coverage report

@@ -1,0 +1,65 @@
+# ============================================
+# Python / Pipenv / Build
+# ============================================
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Pipenv
+Pipfile.lock
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Coverage
+.coverage
+htmlcov/
+
+# pytest cache
+.pytest_cache/
+
+# Jupyter
+*.ipynb_checkpoints/
+
+# ============================================
+# Project-specific exclusions
+# ============================================
+
+# Backups and old versions
+__bak/
+
+# Generated plots
+plots/
+
+# not directly project related
+rr_corr.ipynb
+my_tests.ipynb
+test_rr2graph.ipynb
+README.pdf
+
+# Test data
+rr_data.xlsx
+test_rr_data.xlsx
+test_config.yaml
+
+# Local configs
+config.yaml
+config_od.yaml
+
+# Manpage build artifacts (if any)
+man/*.gz
+
+# ============================================
+# OS / Editor
+# ============================================
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# VS Code
+.vscode/

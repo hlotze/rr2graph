@@ -1,0 +1,106 @@
+.TH RR2GRAPH 1 "May 2026" "rr2graph 1.0" "User Commands"
+.SH NAME
+rr2graph \- process and visualize blood pressure, pulse and weight data
+
+.SH SYNOPSIS
+.B rr2graph
+[\-c config.yaml]
+[\-\-info]
+[\-\-version]
+
+.SH DESCRIPTION
+.B rr2graph
+is a lightweight command-line tool for processing and visualizing
+blood pressure, pulse and weight measurements from Excel files.
+It generates monthly charts (box-swarm, scatter, histogram, violin)
+and exports them as PNG, PDF and SVG.
+
+The tool reads a YAML configuration file that specifies input data,
+output directories and plot settings.
+
+.SH OPTIONS
+.TP
+.BR \-c ", " \-\-config " " \fIFILE\fR
+Path to the YAML configuration file. Defaults to \fIconfig.yaml\fR
+in the current directory.
+
+.TP
+.BR \-\-info
+Show environment, configuration and installation details.
+
+.TP
+.BR \-\-version
+Show program version and exit.
+
+.SH CONFIGURATION
+The configuration file is written in YAML and contains:
+
+.TP
+.B input_file
+Path to the Excel file containing measurement data.
+
+.TP
+.B output_dir
+Directory where generated plots will be saved.
+
+.TP
+.B plots
+List of plot types to generate (e.g. box, swarm, scatter, histogram, violin).
+
+Example:
+
+.nf
+input_file: ~/OneDrive/rr_data.xlsx
+output_dir: ~/OneDrive/rr_plots
+plots:
+  - box
+  - swarm
+  - scatter
+.fi
+
+.SH EXAMPLES
+Generate plots using the default configuration:
+
+.nf
+rr2graph
+.fi
+
+Use a custom configuration file:
+
+.nf
+rr2graph -c config.yaml
+.fi
+
+or with configs more centralized at your HOME
+
+.nf
+rr2graph -c ~/configs/rr2graph.yaml
+.fi
+
+Show diagnostic information:
+
+.nf
+rr2graph --info
+.fi
+
+.SH FILES
+.TP
+.I config.yaml
+Default configuration file.
+
+.SH EXIT STATUS
+.TP
+0
+Success.
+.TP
+1
+General error (invalid config, missing input file, etc.).
+
+.SH SEE ALSO
+python(1), yaml(5)
+
+.SH AUTHOR
+Hagen <hlotze@yahoo.com>
+
+.SH LICENSE
+MIT License.

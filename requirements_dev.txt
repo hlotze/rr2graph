@@ -1,0 +1,10 @@
+pytest
+flake8
+pylint
+black
+ruff
+ipython
+ipykernel
+jupyterlab
+build
+twine

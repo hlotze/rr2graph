@@ -1,0 +1,37 @@
+[project]
+name = "rr2graph"
+version = "0.1.0"
+description = "A lightweight health data analytics tool for monthly time-series visualization and distribution analysis."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+authors = [
+    { name = "Hagen" }
+]
+
+dependencies = [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "seaborn",
+    "pyyaml",
+    "openpyxl",
+    "xlsxwriter"
+]
+
+[project.scripts]
+rr2graph = "rr2graph.cli:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["rr2graph*"]
+
+

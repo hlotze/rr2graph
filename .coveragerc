@@ -1,0 +1,15 @@
+[run]
+branch = True
+source = rr2graph
+omit =
+    */__init__.py
+    */plots/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:
+    raise NotImplementedError
+
+precision = 2
+show_missing = True

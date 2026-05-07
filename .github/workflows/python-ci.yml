@@ -23,7 +23,10 @@ jobs:
         run: pip install pipenv
 
       - name: Install dependencies
-        run: pipenv install --dev
+        run: |
+          pipenv --rm || true
+          pipenv install --dev --python $(which python)
+
 
       - name: Install rr2graph (editable)
         run: pipenv run pip install -e .

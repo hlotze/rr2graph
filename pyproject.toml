@@ -3,7 +3,7 @@ name = "rr2graph"
 version = "0.1.0"
 description = "A lightweight health data analytics tool for monthly time-series visualization and distribution analysis."
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.14"
 license = { text = "MIT" }
 
 authors = [

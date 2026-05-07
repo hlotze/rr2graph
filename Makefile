@@ -6,6 +6,7 @@
 # Configuration
 # ---------------------------------------------------------
 
+ROOT := $(shell git rev-parse --show-toplevel)
 MAN_DIR          := man
 MANPAGE          := $(MAN_DIR)/rr2graph.1
 INSTALL_SCRIPT   := $(MAN_DIR)/install-man.sh
@@ -77,11 +78,11 @@ ci-style:
 	@pipenv run black --check rr2graph
 
 ci-test:
-	@echo "🧪 Running tests..."
-	@pipenv run pip install -e .
-	@pipenv run coverage run -m pytest $(TEST_DIR)
-	@pipenv run coverage report -m
-	@pipenv run coverage html
+        @echo "🧪 Running tests..."
+        @cd $(ROOT) && pipenv run pip install -e .
+        @cd $(ROOT) && pipenv run coverage run -m pytest $(TEST_DIR)
+        @cd $(ROOT) && pipenv run coverage report -m
+        @cd $(ROOT) && pipenv run coverage html
 
 
 # ---------------------------------------------------------

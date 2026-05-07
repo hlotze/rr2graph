@@ -12,7 +12,9 @@ from .layout import get_needed_fig_and_axs_array
 from .monthly import gen_req_plot_type
 
 
-def generate_monthly_plots(plot_type, num_of_months, df_heart, df_weight, out_dir) -> list[str]:
+def generate_monthly_plots(
+    plot_type, num_of_months, df_heart, df_weight, out_dir
+) -> list[str]:
     """generate a mothly plot
     i.e. one row of 3 axs for
     e.g. scatter, histo, histo"""

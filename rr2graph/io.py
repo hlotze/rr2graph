@@ -111,7 +111,6 @@ def read_heart_data(fn: str) -> pd.DataFrame:
     return df.dropna(subset=["date_time"])
 
 
-
 # ---------------------------------------------------------
 # WEIGHT DATA
 # ---------------------------------------------------------

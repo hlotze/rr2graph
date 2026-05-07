@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,7 +30,6 @@ jobs:
         run: |
           pipenv --rm || true
           pipenv install --dev --python $(which python)
-
 
       - name: Install rr2graph (editable)
         run: pipenv run pip install -e .

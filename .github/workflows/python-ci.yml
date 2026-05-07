@@ -35,6 +35,7 @@ jobs:
         run: pipenv run pip install -e .
 
       - name: Run CI pipeline (lint, style, tests)
+        working-directory: ${{ github.workspace }
         run: make ci
 
       - name: Upload coverage report

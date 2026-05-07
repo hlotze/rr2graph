@@ -80,7 +80,7 @@ ci-style:
 ci-test:
 	@echo "🧪 Running tests..."
 	@pipenv run pip install -e .
-	@pipenv run coverage run -m pytest rr2graph tests
+	@pipenv run coverage run -m pytest ../rr2graph tests
 	@pipenv run coverage report -m
 	@pipenv run coverage html
 

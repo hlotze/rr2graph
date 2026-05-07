@@ -6,7 +6,7 @@
 # Configuration
 # ---------------------------------------------------------
 
-ROOT := $(shell git rev-parse --show-toplevel)
+ROOT := $(GITHUB_WORKSPACE)
 
 MAN_DIR          := man
 MANPAGE          := $(MAN_DIR)/rr2graph.1

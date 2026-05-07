@@ -33,6 +33,7 @@ jobs:
         run: pipenv run pip install -e .
 
       - name: Run CI pipeline (lint, style, tests)
+        working-directory: ${{ github.workspace }}/rr2graph
         run: make ci
 
       - name: Upload coverage report

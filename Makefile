@@ -20,7 +20,6 @@ ifeq ($(PIPENV),)
 $(error "pipenv not found — please install pipenv first")
 endif
 
-
 # ---------------------------------------------------------
 # Help
 # ---------------------------------------------------------
@@ -30,22 +29,28 @@ help:
 	@echo ""
 	@echo "📘 rr2graph — Available Make targets"
 	@echo ""
-	@echo "  make setup-dev       — Install dev dependencies"
-	@echo "  make install         — Install rr2graph into venv (editable)"
+	@echo "  make setup-dev        — Install dev dependencies"
+	@echo "  make install          — Install rr2graph into venv (editable)"
 	@echo ""
-	@echo "  make ci              — Run full CI pipeline"
-	@echo "  make ci-lint         — Run ruff linter"
-	@echo "  make ci-style        — Run black style check"
-	@echo "  make ci-test         — Run pytest with coverage"
+	@echo "  make ci               — Run full CI pipeline"
+	@echo "  make ci-lint          — Run ruff linter"
+	@echo "  make ci-style         — Run black style check"
+	@echo "  make ci-test          — Run pytest with coverage"
 	@echo ""
-	@echo "  make format          — Auto-format code (ruff + black)"
-	@echo "  make clean           — Remove build + cache artifacts"
-	@echo "  make build           — Build wheel + sdist"
-	@echo "  make release         — Build release artifacts"
+	@echo "  make format           — Auto-format code (ruff + black)"
+	@echo "  make clean            — Remove build + cache artifacts"
+	@echo "  make build            — Build wheel + sdist"
+	@echo "  make release          — Build release artifacts"
 	@echo ""
-	@echo "  make install-man     — Install manpage"
-	@echo "  make uninstall-man   — Uninstall manpage"
-	@echo "  make man             — View manpage locally"
+	@echo "  make version-patch    — Bump patch version (X.Y.Z → X.Y.(Z+1))"
+	@echo "  make version-minor    — Bump minor version (X.Y.Z → X.(Y+1).0)"
+	@echo "  make version-major    — Bump major version ((X+1).0.0)"
+	@echo ""
+	@echo "  make publish-test     — Upload build artifacts to TestPyPI"
+	@echo ""
+	@echo "  make install-man      — Install manpage"
+	@echo "  make uninstall-man    — Uninstall manpage"
+	@echo "  make man              — View manpage locally"
 	@echo ""
 
 
@@ -144,3 +149,34 @@ uninstall-man:
 
 man:
 	@man ./$(MANPAGE)
+
+
+# ---------------------------------------------------------
+# Version bumping (patch/minor/major)
+# ---------------------------------------------------------
+
+.PHONY: version-patch version-minor version-major
+
+version-patch:
+	@echo "🔧 Bumping patch version..."
+	@pipenv run python -m rr2graph.tools.bump_version patch
+
+version-minor:
+	@echo "🔧 Bumping minor version..."
+	@pipenv run python -m rr2graph.tools.bump_version minor
+
+version-major:
+	@echo "🔧 Bumping major version..."
+	@pipenv run python -m rr2graph.tools.bump_version major
+
+
+# ---------------------------------------------------------
+# TestPyPI Upload
+# ---------------------------------------------------------
+
+.PHONY: publish-test
+
+publish-test: build
+	@echo "🚀 Uploading to TestPyPI..."
+	@pipenv run twine upload --repository testpypi dist/*
+	@echo "✅ Uploaded to TestPyPI"

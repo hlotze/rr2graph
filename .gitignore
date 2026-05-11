@@ -32,8 +32,8 @@ htmlcov/
 # Backups and old versions
 __bak/
 
-# Generated plots
-plots/
+# Generated plots at toplevel dir
+/plots/
 
 # not directly project related
 rr_corr.ipynb

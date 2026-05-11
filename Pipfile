@@ -19,6 +19,8 @@ pylint = "*"
 black = "*"
 ruff = "*"
 coverage = "*"
+build = "*"
+twine = "*"
 
 [requires]
 python_version = "3.14"

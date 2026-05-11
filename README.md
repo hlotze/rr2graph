@@ -14,7 +14,7 @@ It generates monthly plots (box‑swarm, scatter, histogram, violin) and exports
 
 Example visualization using scatter and box‑swarm plots:
 
-![Example Box Swarm Plot](examples/example_box_swarm.png)
+![Example Box Swarm Plot](rr2graph/examples/example_box_swarm.png)
 
 Format: **A4 Landscape (11.69 × 8.27 inch)**
 

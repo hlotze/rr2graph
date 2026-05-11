@@ -1,219 +1,176 @@
+# 📘 rr2graph — Visualize Blood Pressure, Pulse, and Weight Data
 
-# 📘 rr2graph — RR‑ und Gewichtsdaten visualisieren
+<p align="center">
+  <img src="https://img.shields.io/pypi/v/rr2graph.svg" alt="PyPI Version">
+  <img src="https://img.shields.io/pypi/dm/rr2graph.svg" alt="PyPI Downloads">
+  <img src="https://github.com/hlotze/rr2graph/actions/workflows/python-package.yml/badge.svg" alt="CI Status">
+  <a href="https://codecov.io/gh/hlotze/rr2graph">
+    <img src="https://codecov.io/gh/hlotze/rr2graph/branch/main/graph/badge.svg" alt="Coverage">
+  </a>
+  <img src="https://img.shields.io/pypi/pyversions/rr2graph.svg" alt="Python Versions">
+  <img src="https://img.shields.io/github/license/hagen/rr2graph.svg" alt="License">
+</p>
 
-`rr2graph` ist ein leichtgewichtiges CLI‑Tool zur Verarbeitung und Visualisierung von Blutdruck‑, Puls‑ und Gewichtsdaten aus Excel‑Dateien.  
-Es erzeugt monatliche Diagramme (Box‑Swarm, Scatter, Histogramm, Violin) und speichert sie automatisch als PNG, PDF und SVG.
+`rr2graph` is a lightweight command‑line tool for processing and visualizing blood pressure, pulse, and weight data stored in Excel files.  
+It generates monthly plots (box‑swarm, scatter, histogram, violin) and exports them automatically as PNG, PDF, and SVG.
 
 
-## 📤 Ausgabe
 
-Exemplarisch hier die Darstellung mit Scatterplot und Box-Schwarnplots:
+## 📤 Example Output
 
-![Drei-Monatsblatt](example_box_swarm.png)
+Example visualization using scatter and box‑swarm plots:
 
-im Format: A4 Landscape (11.69 × 8.27 inch)
+![Three‑Month Sheet](example_box_swarm.png)
 
-Das Skript listet die erzeugten Dateien im Terminal aus:
+Format: **A4 Landscape (11.69 × 8.27 inch)**
 
-```bash
-❯ pipenv run rr2graph
+The CLI prints all generated files:
+
+```text
 Heart rows read: 81
 Weight rows read: 49
-
-→ Excel-Datei: rr_data.xlsx
-→ Monate: 3
-→ Output-Ordner: plots/
-
+→ Excel file: rr_data.xlsx
+→ Months: 3
+→ Output folder: plots/
 Generating histogram plots…
 Generated histogram plots stored at:
--- plots/png/(2026-02__2026-04 3 months) per month data and histogram.png
--- plots/pdf/(2026-02__2026-04 3 months) per month data and histogram.pdf
--- plots/svg/(2026-02__2026-04 3 months) per month data and histogram.svg
-
-Generating violin plots…
-Generated violin plots stored at:
--- plots/png/(2026-02__2026-04 3 months) per month data and violin.png
--- plots/pdf/(2026-02__2026-04 3 months) per month data and violin.pdf
--- plots/svg/(2026-02__2026-04 3 months) per month data and violin.svg
-
-Generating box_swarm plots…
-Generated box_swarm plots stored at:
--- plots/png/(2026-02__2026-04 3 months) per month data and box_swarm.png
--- plots/pdf/(2026-02__2026-04 3 months) per month data and box_swarm.pdf
--- plots/svg/(2026-02__2026-04 3 months) per month data and box_swarm.svg
+– plots/png/(2026-02__2026-04 3 months) per month data and histogram.png
+– plots/pdf/(2026-02__2026-04 3 months) per month data and histogram.pdf
+– plots/svg/(2026-02__2026-04 3 months) per month data and histogram.svg
+…
 ```
 
-**Help**
-
-```bash
-❯ pipenv run rr2graph --help 
-usage: rr2graph [-h] [-e EXCEL] [-n NUM_OF_MONTHS] [-o OUTPUT] [-c CONFIG] [-v] [-g] [-i]
-
-Liest Excel-Daten ein und erzeugt daraus Graphiken.
-
-options:
-  -h, --help            show this help message and exit
-  -e, --excel EXCEL     Pfad zur Excel-Datei (Default: rr_data.xlsx)
-  -n, --num_of_months NUM_OF_MONTHS
-                        Anzahl der Monate 1–6 (Default: 3)
-  -o, --output OUTPUT   Output-Ordner für die erzeugten Plots (Default: plots/)
-  -c, --config CONFIG   Pfad zu einer optionalen YAML-Konfigurationsdatei
-  -v, --version         show program's version number and exit
-  -g, --generate-test-data
-                        Erzeugt test_rr_data.xlsx und beendet das Programm
-  -i, --info            Zeigt System- und Konfigurationsinformationen an
-```
-
-**Info**
-
-```bash
- ❯ rr2graph --info                                                             
-rr2graph info
-──────────────────────────────────────────────
-Version:        0.1.0
-Python:         3.14.4
-Installiert in: /Users/your_user/your/project/directory/rr2graph
-
-Arbeitsverz.:   /Users/your_user/your/project/directory
-System:         Darwin 25.3.0 (arm64)
-Terminal:       utf-8
-
-Gefundene Config-Datei: config.yaml
-  Excel-Datei:   rr_data.xlsx
-  Monate:        3
-  Output-Ordner: plots/
-──────────────────────────────────────────────
-Alles sieht gut aus ✓
-```
-
----
 
 ## 🚀 Installation
 
-### 1. Projektverzeichnis vorbereiten
+1. Ensure you are in the project root
 
-Stelle sicher, dass du im Projekt‑Root bist:
+    > ~/your/project/directory/
 
-```code
-~/your/project/directory/
-```
+2. Install using Pipenv (editable mode)
 
-### 2. Pipenv‑Environment installieren
+    ```bash
+    pipenv install -e .
+    ```
 
-```bash
-pipenv install -e .
-```
+    This installs:
+    - the rr2graph package (editable mode)
+    - all dependencies defined in pyproject.toml
 
-Das installiert:
+3. Optional: Development dependencies
 
-- dein Paket `rr2graph` im Editable‑Modus  
-- alle Dependencies aus `pyproject.toml`
+    ```bash
+    pipenv install -r requirements_dev.txt
+    ```
 
-### 3. Optional: Dev‑Dependencies
+## 🧰 CLI Usage
 
-```bash
-pipenv install -r requirements_dev.txt
-```
+After installation, the command rr2graph becomes available.
 
----
-
-## 🧰 CLI‑Usage
-
-Nach der Installation steht dir der Konsolenbefehl **`rr2graph`** zur Verfügung.
-
-### Konfigurationsdatei verwenden
+Show help
 
 ```bash
-rr2graph -c config.yaml
+rr2graph --help
 ```
 
-oder:
+```text
+usage: rr2graph [-h] [-e EXCEL] [-n NUM_OF_MONTHS] [-o OUTPUT] [-c CONFIG] [-v] [-g] [-i]
 
-```bash
-rr2graph –config config.yaml
+Reads Excel data and generates plots.
+
+options:
+  -h, --help            Show help and exit
+  -e, --excel EXCEL     Path to Excel file (default: rr_data.xlsx)
+  -n, --num_of_months NUM_OF_MONTHS
+                        Number of months 1–6 (default: 3)
+  -o, --output OUTPUT   Output folder for generated plots (default: plots/)
+  -c, --config CONFIG   Optional YAML configuration file
+  -v, --version         Show program version and exit
+  -g, --generate-test-data
+                        Generate test_rr_data.xlsx and exit
+  -i, --info            Show system and configuration information
 ```
 
-### Testdaten erzeugen
+## 🧪 Generate Test Data
 
 ```bash
 rr2graph -g
 ```
 
-oder:
+Creates:
+
+> test_rr_data.xlsx 
+
+with realistic blood pressure, pulse, and weight data.
+
+## ℹ️ System & Configuration Info
 
 ```bash
-rr2graph –generate-test-data
+rr2graph --info
 ```
 
-Erzeugt: `test_rr_data.xlsx`
+Example output:
 
-### System‑ und Projektinfo anzeigen
+```text
+rr2graph info
+──────────────────────────────────────────────
+Version:        1.1.0
+Python:         3.11.15
+Installed at:   /opt/homebrew/lib/python3.11/site-packages/rr2graph
 
-```bash
-rr2graph –info
+Working dir:    /Users/your_user/rr2graph_test
+System:         Darwin 25.3.0 (arm64)
+Terminal:       utf-8
+
+No config file found (config.yaml missing).
+──────────────────────────────────────────────
+Everything looks good ✓
 ```
 
-Zeigt:
+## 📝 Configuration File (YAML)
 
-- Version  
-- Python‑Version  
-- Installationspfad  
-- Config‑Status  
-- Excel‑Pfad  
-- Output‑Ordner  
-- Systeminfo  
+Example config.yaml:
 
----
-
-## 📝 Konfigurationsdatei (YAML)
-
-Beispiel `config.yaml`:
-
-```yaml
+```python
 excel: "rr_data.xlsx"
 num_of_months: 3
 output: "plots/"
 ```
 
-| Feld | Bedeutung |
-| ---- | --------- |
-| excel | Pfad und name der Excel‑Datei mit RR‑Daten |
-| num_of_months | Anzahl der Monate, die ausgewertet werden sollen |
-| output | Zielordner für PNG/PDF/SVG‑Plots |
+| Field | Description |
+| ----- | ----- |
+| excel | Path to the Excel file containing RR data |
+| num_of_months | Number of months to analyze |
+| output | Output directory for PNG/PDF/SVG plots |
 
----
-
-## 📊 Output‑Struktur
-
-Nach dem Ausführen von:
+Use it via:
 
 ```bash
 rr2graph -c config.yaml
 ```
 
-wird automatisch erzeugt:
+## 📊 Output Structure
 
-```code
+Running:
+
+```bash
+rr2graph -c config.yaml
+```
+
+produces:
+
+```text
 plots/
 ├── png/
 ├── pdf/
 └── svg/
 ```
 
-Bei Testdaten:
+## 📁 Project Structure
 
-```code
-plots/test/
-├── png/
-├── pdf/
-└── svg/
-```
+> /your/project/directory/
 
----
-## 📁 Projektstruktur
-
-```code
-/your/project/directory/
+```text
 .
 ├── config.yaml
 ├── example_box_swarm.png
@@ -235,6 +192,8 @@ plots/test/
 │   ├── layout.py
 │   ├── monthly.py
 │   ├── orchestrator.py
+│   ├── tools/
+│   │   └── bump_version.py
 │   └── plots/
 │       ├── box_swarm.py
 │       ├── hist.py
@@ -246,63 +205,79 @@ plots/test/
     └── test_rr2graph.py
 ```
 
----
-## 🧪 Testdatenerzeugung
-
-```bash
-rr2graph -g
-```
-
-Erzeugt eine Datei: `test_rr_data.xlsx` mit realistischen RR‑, Puls‑ und Gewichtsdaten.
-
----
-## 🧪 Tests ausführen
+## 🧪 Run Tests
 
 ```bash
 pipenv run pytest
 ```
 
----
+# 🛠 Troubleshooting
+❌ UnicodeDecodeError in YAML
 
-## 🛠 Troubleshooting
+You likely passed an Excel file as --config.
 
-### Fehler: UnicodeDecodeError in YAML
-
-Du hast wahrscheinlich eine Excel‑Datei als --config übergeben.
-
-Richtig:
+Correct:
 
 ```bash
-r2graph -c config.yaml
+rr2graph -c config.yaml
 ```
 
-Falsch:
+Incorrect:
 
 ```bash
 rr2graph -c test_rr_data.xlsx
 ```
 
-- Keine Plots erzeugt
-- Excel‑Datei existiert nicht
-- Output‑Ordner nicht beschreibbar
-- Config‑Pfad falsch
+❌ CLI command not found
 
-### CLI‑Befehl nicht gefunden
-
-Installiere erneut:
+Reinstall:
 
 ```bash
 pipenv install -e .
 ```
 
----
-📄 Lizenz
-(TODO: Optional – kann ergänzt werden.)
 
----
+## 👨‍💻 Developer Notes
+Version bumping is handled via:
 
-TODO:
+```text
+make version-patch
+make version-minor
+make version-major
+```
 
-- eine Developer‑Section ergänzen  
-- oder die README automatisch aus deinen Modulen generieren lassen  
+TestPyPI upload:
 
+```
+make publish-test
+```
+
+Build artifacts:
+
+```text
+make build
+```
+
+Manpage installation:
+
+```text
+make install-man
+make man
+```
+
+## 📄 License
+
+MIT (or add your preferred license here)
+
+- Diese README.md **1:1 ins Repository kopieren**  
+- Optional: Badges ergänzen (PyPI, CI, Coverage)  
+- Optional: Englische Manpage ergänzen  
+- Optional: Developer‑Section erweitern  
+
+Wenn du willst, kann ich dir:
+
+- eine **PyPI‑optimierte** Version (mit Badges, Short Description, Keywords) erstellen  
+- eine **GitHub‑optimierte** Version (mit Sections für Issues, Contributing, Changelog)  
+- eine **zweisprachige README** (README.md + README.de.md) generieren  
+
+Sag einfach Bescheid, wie du weitermachen möchtest.

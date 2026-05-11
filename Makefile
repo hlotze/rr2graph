@@ -85,11 +85,10 @@ ci-style:
 ci-test:
 	@echo "🧪 Running tests..."
 	@pipenv run pip install -e .
-	@pipenv run coverage run -m pytest tests
-	@pipenv run coverage report -m
+	@pipenv run pytest --cov=rr2graph --cov-branch --cov-report=xml --cov-report=term-missing tests
 	@pipenv run coverage html
 
-
+	
 # ---------------------------------------------------------
 # Formatting
 # ---------------------------------------------------------

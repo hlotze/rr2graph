@@ -13,7 +13,6 @@ openpyxl = "*"
 xlsxwriter = "*"
 
 [dev-packages]
-pytest = "*"
 flake8 = "*"
 pylint = "*"
 black = "*"
@@ -21,6 +20,8 @@ ruff = "*"
 coverage = "*"
 build = "*"
 twine = "*"
+pytest = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.14"

@@ -57,9 +57,7 @@ def generate_scatter_plot(
     scatter.set_ylabel("RR (mm Hg)\nHeart Rate (bpm)\nWeight (kg)")
 
     # x ticks and labels
-    ticks = calculate_weekly_ticks(
-        df_heart["date_time"]
-    )
+    ticks = calculate_weekly_ticks(df_heart["date_time"])
 
     labels = [
         tick.strftime("%a %d.%m.") if tick.weekday() == 0 else "" for tick in ticks

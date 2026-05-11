@@ -5,14 +5,17 @@ from pathlib import Path
 
 PYPROJECT = Path("pyproject.toml")
 
+
 def load_version():
     data = tomllib.loads(PYPROJECT.read_text())
     return data["project"]["version"]
+
 
 def save_version(old, new):
     text = PYPROJECT.read_text()
     text = text.replace(f'version = "{old}"', f'version = "{new}"')
     PYPROJECT.write_text(text)
+
 
 def bump(kind):
     old = load_version()
@@ -34,6 +37,7 @@ def bump(kind):
     new = f"{major}.{minor}.{patch}"
     save_version(old, new)
     print(f"Bumped version: {old} → {new}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

@@ -12,6 +12,7 @@ jobs:
 
     env:
       PIPENV_PIPFILE: ${{ github.workspace }}/Pipfile
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout repository

@@ -167,7 +167,7 @@ plots/
 ```text
 .
 ├── config.yaml
-├── example_box_swarm.png
+├── examples/example_box_swarm.png
 ├── Pipfile
 ├── plots/
 │   ├── pdf/

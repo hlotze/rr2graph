@@ -1,6 +1,6 @@
 [project]
 name = "rr2graph"
-version = "0.1.4"
+version = "0.1.5"
 description = "A lightweight health data analytics tool for monthly time-series visualization and distribution analysis."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -31,9 +31,9 @@ build-backend = "setuptools.build_meta"
 package-dir = {"" = "."}
 include-package-data = true
 
-
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["rr2graph*"]
 
-
+[tool.setuptools.package-data]
+rr2graph = ["examples/*.png"]

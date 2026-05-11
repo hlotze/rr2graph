@@ -10,13 +10,11 @@
 `rr2graph` is a lightweight command‑line tool for processing and visualizing blood pressure, pulse, and weight data stored in Excel files.  
 It generates monthly plots (box‑swarm, scatter, histogram, violin) and exports them automatically as PNG, PDF, and SVG.
 
-
-
 ## 📤 Example Output
 
 Example visualization using scatter and box‑swarm plots:
 
-![Example Box Swarm Plot](examples/example_box_swarm_plot.png)
+![Example Box Swarm Plot](examples/example_box_swarm.png)
 
 Format: **A4 Landscape (11.69 × 8.27 inch)**
 

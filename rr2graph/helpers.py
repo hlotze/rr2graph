@@ -12,7 +12,6 @@ import pandas as pd
 from rr2graph import __file__ as pkg_file
 from . import __version__
 
-
 CYAN: str = "\033[96m"
 GREEN: str = "\033[92m"
 YELLOW: str = "\033[93m"

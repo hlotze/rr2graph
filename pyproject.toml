@@ -34,3 +34,6 @@ include-package-data = true
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["rr2graph*"]
+
+[tool.black]
+target-version = ["py311"]

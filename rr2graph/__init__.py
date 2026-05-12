@@ -2,7 +2,10 @@
 
 # rr2graph/__init__.py
 
-VERSION = "1.1.0"
+from importlib.metadata import version
+
+__version__ = version("rr2graph")
+
 XLSX_FN = "rr_data.xlsx"
 NUM_OF_MONTHS = 3
 OUTPUT_DIR = "plots/"

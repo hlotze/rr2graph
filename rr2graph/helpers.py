@@ -10,7 +10,8 @@ import numpy as np
 import pandas as pd
 
 from rr2graph import __file__ as pkg_file
-from . import VERSION
+from . import __version__
+
 
 CYAN: str = "\033[96m"
 GREEN: str = "\033[92m"
@@ -81,8 +82,7 @@ def print_info():
     print(f"{CYAN}rr2graph info{RESET}")
     print("──────────────────────────────────────────────")
 
-    # Version (optional: später aus __init__.py lesen)
-    print(f"Version:        {VERSION}")
+    print(f"Version:        {__version__}")
     print(f"Python:         {platform.python_version()}")
     print(f"Installiert in: {os.path.dirname(pkg_file)}")
     print()

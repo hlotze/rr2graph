@@ -6,8 +6,6 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Release](https://img.shields.io/github/v/release/hlotze/rr2graph)
 
-
-
 `rr2graph` is a lightweight command‑line tool for processing and visualizing blood pressure, pulse, and weight data stored in Excel files.  
 It generates monthly plots (box‑swarm, scatter, histogram, violin) and exports them automatically as PNG, PDF, and SVG.
 
@@ -16,7 +14,6 @@ It generates monthly plots (box‑swarm, scatter, histogram, violin) and exports
 Example visualization using scatter and box‑swarm plots:
 
 ![Example Box Swarm Plot](https://raw.githubusercontent.com/hlotze/rr2graph/main/examples/example_box_swarm.png)
-
 
 Format: **A4 Landscape (11.69 × 8.27 inch)**
 
@@ -36,6 +33,57 @@ Generated histogram plots stored at:
 …
 ```
 
+## 🚀 Quickstart (End‑User)
+
+The following steps show how to test rr2graph in a clean environment — exactly as a new user would do.
+
+1. Create a new working directory
+
+    ```bash
+    mkdir rr2graph_test
+    cd rr2graph_test
+    ```
+
+2. Create and activate a virtual environment
+
+    ```bash
+    python3.11 -m venv venv
+    source venv/bin/activate
+    ````
+
+3. Install from PyPI
+
+    ```bash
+    pip install rr2graph
+    ```
+
+4. see the help information
+
+    ```bash
+    rr2graph -h
+    ```
+
+5. Verify the installation
+
+    ```bash
+    rr2graph --info
+    ```
+
+6. Generate test data
+
+    ```bash
+    rr2graph -g
+    ```
+
+    This creates a file: `test_rr_data.xlsx`
+
+7. Generate example plots
+
+    ```bash
+    rr2graph -e test_rr_data.xlsx -n 3
+    ```
+
+    The generated plots will appear in the directory: `plots/`
 
 ## 🚀 Installation
 
@@ -95,7 +143,7 @@ rr2graph -g
 
 Creates:
 
-> test_rr_data.xlsx 
+> test_rr_data.xlsx
 
 with realistic blood pressure, pulse, and weight data.
 
@@ -206,7 +254,8 @@ plots/
 pipenv run pytest
 ```
 
-# 🛠 Troubleshooting
+## 🛠 Troubleshooting
+
 ❌ UnicodeDecodeError in YAML
 
 You likely passed an Excel file as --config.
@@ -231,8 +280,8 @@ Reinstall:
 pipenv install -e .
 ```
 
-
 ## 👨‍💻 Developer Notes
+
 Version bumping is handled via:
 
 ```text
@@ -243,7 +292,7 @@ make version-major
 
 TestPyPI upload:
 
-```
+```bash
 make publish-test
 ```
 
@@ -263,6 +312,3 @@ make man
 ## 📄 License
 
 MIT
-
-
-

@@ -1,7 +1,7 @@
 """collection of functions needed at command line"""
 
 import argparse
-from . import VERSION, XLSX_FN, NUM_OF_MONTHS, OUTPUT_DIR
+from . import __version__, XLSX_FN, NUM_OF_MONTHS, OUTPUT_DIR
 from .helpers import (
     valid_month,
     load_config,
@@ -56,7 +56,7 @@ def parse_args():
     )
 
     parser.add_argument(
-        "-v", "--version", action="version", version=f"rr2graph {VERSION}"
+        "-v", "--version", action="version", version=f"rr2graph {__version__}"
     )
 
     parser.add_argument(

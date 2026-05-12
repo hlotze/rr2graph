@@ -34,6 +34,3 @@ include-package-data = true
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["rr2graph*"]
-
-[tool.setuptools.package-data]
-rr2graph = ["examples/*.png"]

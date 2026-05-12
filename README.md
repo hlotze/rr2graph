@@ -1,11 +1,10 @@
 # 📘 rr2graph — Visualize Blood Pressure, Pulse, and Weight Data
 
-[![PyPI Version](https://img.shields.io/pypi/v/rr2graph.svg)](https://pypi.org/project/rr2graph/)
-![Downloads](https://img.shields.io/pypi/dm/rr2graph.svg)
-![Python Versions](https://img.shields.io/pypi/pyversions/rr2graph.svg)
+[![PyPI Version](https://img.shields.io/pypi/v/rr2graph)](https://pypi.org/project/rr2graph/)
 ![CI Status](https://github.com/hlotze/rr2graph/actions/workflows/python-ci.yml/badge.svg)
 [![Coverage](https://codecov.io/gh/hlotze/rr2graph/branch/main/graph/badge.svg)](https://codecov.io/gh/hlotze/rr2graph)
-![License](https://img.shields.io/github/license/hlotze/rr2graph.svg)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 
 `rr2graph` is a lightweight command‑line tool for processing and visualizing blood pressure, pulse, and weight data stored in Excel files.  
 It generates monthly plots (box‑swarm, scatter, histogram, violin) and exports them automatically as PNG, PDF, and SVG.
@@ -14,7 +13,7 @@ It generates monthly plots (box‑swarm, scatter, histogram, violin) and exports
 
 Example visualization using scatter and box‑swarm plots:
 
-![Example Box Swarm Plot](rr2graph/examples/example_box_swarm.png)
+![Example Box Swarm Plot](examples/example_box_swarm.png)
 
 Format: **A4 Landscape (11.69 × 8.27 inch)**
 
@@ -162,9 +161,8 @@ plots/
 
 ## 📁 Project Structure
 
-> /your/project/directory/
-
 ```text
+/your/project/directory/
 .
 ├── config.yaml
 ├── examples/example_box_swarm.png
@@ -261,17 +259,7 @@ make man
 
 ## 📄 License
 
-MIT (or add your preferred license here)
+MIT
 
-- Diese README.md **1:1 ins Repository kopieren**  
-- Optional: Badges ergänzen (PyPI, CI, Coverage)  
-- Optional: Englische Manpage ergänzen  
-- Optional: Developer‑Section erweitern  
 
-Wenn du willst, kann ich dir:
 
-- eine **PyPI‑optimierte** Version (mit Badges, Short Description, Keywords) erstellen  
-- eine **GitHub‑optimierte** Version (mit Sections für Issues, Contributing, Changelog)  
-- eine **zweisprachige README** (README.md + README.de.md) generieren  
-
-Sag einfach Bescheid, wie du weitermachen möchtest.

@@ -47,6 +47,7 @@ help:
 	@echo "  make version-major    — Bump major version ((X+1).0.0)"
 	@echo ""
 	@echo "  make publish-test     — Upload build artifacts to TestPyPI"
+	@echo "  make publish          — Upload build artifacts to PyPI"
 	@echo ""
 	@echo "  make install-man      — Install manpage"
 	@echo "  make uninstall-man    — Uninstall manpage"
@@ -70,7 +71,6 @@ setup-dev:
 # ---------------------------------------------------------
 
 .PHONY: ci ci-lint ci-style ci-test
-
 ci: ci-lint ci-style ci-test
 	@echo "✅ CI pipeline completed successfully"
 
@@ -106,7 +106,6 @@ format:
 # ---------------------------------------------------------
 
 .PHONY: build clean release install
-
 install:
 	@echo "📦 Installing rr2graph into venv..."
 	@pipenv run pip install -e .
@@ -137,7 +136,6 @@ release: build
 # ---------------------------------------------------------
 
 .PHONY: install-man uninstall-man man
-
 install-man:
 	@echo "📦 Installing manpage..."
 	@$(INSTALL_SCRIPT)
@@ -155,7 +153,6 @@ man:
 # ---------------------------------------------------------
 
 .PHONY: version-patch version-minor version-major
-
 version-patch:
 	@echo "🔧 Bumping patch version..."
 	@pipenv run python -m rr2graph.tools.bump_version patch
@@ -174,12 +171,17 @@ version-major:
 # ---------------------------------------------------------
 
 .PHONY: publish-test
-
 publish-test: build
 	@echo "🚀 Uploading to TestPyPI..."
 	@pipenv run twine upload --repository testpypi dist/*
 	@echo "✅ Uploaded to TestPyPI"
 
+
+# ---------------------------------------------------------
+# PyPI Upload
+# ---------------------------------------------------------
+
+.PHONY: publish
 publish:
 	@echo "🚀 Uploading to PyPI..."
 	@pipenv run twine upload dist/*

@@ -49,7 +49,7 @@ The following steps show how to test rr2graph in a clean environment — exactly
     ```bash
     python3.11 -m venv venv
     source venv/bin/activate
-    ````
+    ```
 
 3. Install from PyPI
 

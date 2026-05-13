@@ -1,6 +1,7 @@
 """provides io related functions"""
 
 from datetime import datetime
+import re
 
 import numpy as np
 import pandas as pd
@@ -11,7 +12,7 @@ import pandas as pd
 
 
 def parse_excel_date(val):
-    """Parst dd.mm.YY, dd.mm.YYYY, ISO-Datum und Excel-Seriendatum."""
+    """Parst dd.mm.YY, dd.mm.YYYY, ISO-Datum, ISO-Datetime und Excel-Seriendatum."""
     try:
         excel_origin = pd.Timestamp("1899-12-30")
 
@@ -19,7 +20,7 @@ def parse_excel_date(val):
         if isinstance(val, (int, float)) and not pd.isna(val):
             return excel_origin + pd.to_timedelta(int(val), unit="D")
 
-        # Fall 2: Excel-Seriendatum als String (z. B. "45231")
+        # Fall 2: Excel-Seriendatum als String
         if isinstance(val, str):
             s = val.strip()
             if s.isdigit():
@@ -32,12 +33,24 @@ def parse_excel_date(val):
                 return excel_origin + pd.to_timedelta(delta, unit="D")
             return val
 
-        # Fall 4: Normales Datum
-        return pd.to_datetime(
-            val,
-            dayfirst=True,
-            errors="coerce",
-        )
+        # Fall 4: Normale Datumsstrings
+        if isinstance(val, str):
+            s = val.strip()
+
+            # 4A: ISO-Datetime
+            if re.match(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$", s):
+                return pd.to_datetime(s, format="%Y-%m-%d %H:%M:%S", errors="coerce")
+
+            # 4B: ISO-Date
+            if re.match(r"^\d{4}-\d{2}-\d{2}$", s):
+                return pd.to_datetime(s, format="%Y-%m-%d", errors="coerce")
+
+            # 4C: Deutsche Formate
+            if re.match(r"^\d{1,2}\.\d{1,2}\.\d{2,4}$", s):
+                return pd.to_datetime(s, dayfirst=True, errors="coerce")
+
+        # Fallback
+        return pd.to_datetime(val, errors="coerce")
 
     except Exception:
         return pd.NaT

@@ -33,8 +33,8 @@ def test_parse_excel_date_dd_mm_yyyy():
 
 
 def test_parse_excel_date_iso_dayfirst_behavior():
-    # ISO wird wegen dayfirst=True als 03.11.2025 interpretiert → 2025-03-11
-    assert parse_excel_date("2025-11-03") == pd.Timestamp(year=2025, month=3, day=11)
+    # ISO-Date wird korrekt als YYYY-MM-DD interpretiert (3. November 2025)
+    assert parse_excel_date("2025-11-03") == pd.Timestamp(2025, 11, 3)
 
 
 def test_parse_excel_date_excel_int():

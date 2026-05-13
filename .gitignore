@@ -19,8 +19,10 @@ dist/
 *.egg-info/
 
 # Coverage
+coverage.xml
 .coverage
 htmlcov/
+coverage/
 
 # pytest cache
 .pytest_cache/
@@ -46,6 +48,7 @@ rr_corr.ipynb
 my_tests.ipynb
 test_rr2graph.ipynb
 README.pdf
+my_TODOs.md
 
 # Test data
 rr_data.xlsx

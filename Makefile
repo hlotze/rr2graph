@@ -179,3 +179,8 @@ publish-test: build
 	@echo "🚀 Uploading to TestPyPI..."
 	@pipenv run twine upload --repository testpypi dist/*
 	@echo "✅ Uploaded to TestPyPI"
+
+publish:
+	@echo "🚀 Uploading to PyPI..."
+	@pipenv run twine upload dist/*
+	@echo "✅ Uploaded to PyPI"

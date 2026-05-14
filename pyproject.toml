@@ -10,6 +10,14 @@ authors = [
     { name = "Hagen" }
 ]
 
+# 🔗 Hier einfügen: Links für PyPI
+[project.urls]
+Homepage = "https://github.com/hlotze/rr2graph"
+Repository = "https://github.com/hlotze/rr2graph"
+Issues = "https://github.com/hlotze/rr2graph/issues"
+Documentation = "https://github.com/hlotze/rr2graph#readme"
+Changelog = "https://github.com/hlotze/rr2graph/releases"
+
 dependencies = [
     "numpy",
     "pandas",

@@ -10,14 +10,6 @@ authors = [
     { name = "Hagen" }
 ]
 
-# 🔗 Hier einfügen: Links für PyPI
-[project.urls]
-Homepage = "https://github.com/hlotze/rr2graph"
-Repository = "https://github.com/hlotze/rr2graph"
-Issues = "https://github.com/hlotze/rr2graph/issues"
-Documentation = "https://github.com/hlotze/rr2graph#readme"
-Changelog = "https://github.com/hlotze/rr2graph/releases"
-
 dependencies = [
     "numpy",
     "pandas",
@@ -27,6 +19,13 @@ dependencies = [
     "openpyxl",
     "xlsxwriter"
 ]
+
+[project.urls]
+Homepage = "https://github.com/hlotze/rr2graph"
+Repository = "https://github.com/hlotze/rr2graph"
+Issues = "https://github.com/hlotze/rr2graph/issues"
+Documentation = "https://github.com/hlotze/rr2graph#readme"
+Changelog = "https://github.com/hlotze/rr2graph/releases"
 
 [project.scripts]
 rr2graph = "rr2graph.cli:main"

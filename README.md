@@ -9,7 +9,6 @@
 ![Docker Pulls](https://img.shields.io/badge/GHCR%20Pulls-Automatic-blue?logo=docker)
 ![Docker Image](https://img.shields.io/badge/Multi--Arch-AMD64%20%7C%20ARM64-green?logo=docker)
 
-
 `rr2graph` is a lightweight command‑line tool for processing and visualizing blood pressure, pulse, and weight data stored in Excel files.  
 It generates monthly plots (box‑swarm, scatter, histogram, violin) and exports them automatically as PNG, PDF, and SVG.
 
@@ -50,7 +49,11 @@ finden Sie eine vollständige Anleitung in:
 
 👉 [.venv - Quickstart (Virtual Environment, End‑User)](./README_VENV.md)
 
+## ⚡ Python Quickstart mit uv (End‑User)
 
+Für Nutzer, die rr2graph mit dem modernen Python‑Tool uv verwenden möchten:
+
+👉 [Quickstart mit uv (End‑User)](./README_UV.md)
 
 ## 🚀 Installation
 

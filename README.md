@@ -33,59 +33,24 @@ Generated histogram plots stored at:
 …
 ```
 
-## 🚀 Quickstart (End‑User)
+## 🐳 Docker Quickstart (End‑User)
 
-The following steps show how to test rr2graph in a clean environment — exactly as a new user would do.
+🇩🇪 Wenn Sie rr2graph ohne lokale Python‑Installation nutzen möchten,
+finden Sie eine vollständige Anleitung in:
 
-1. Create a new working directory
+👉 [Docker - Quickstart für End‑User](./README_DOCKER.md)
 
-    ```bash
-    mkdir rr2graph_test
-    cd rr2graph_test
-    ```
+## 🐍 Python Quickstart (Virtual Environment, End‑User)
 
-2. Create and activate a virtual environment
+🇩🇪 Wenn Sie rr2graph lokal mit Python in einer isolierten Umgebung nutzen möchten, finden Sie eine vollständige Schritt‑für‑Schritt‑Anleitung in:
 
-    ```bash
-    python3.11 -m venv venv
-    source venv/bin/activate
-    ```
+👉 [.venv - Quickstart (Virtual Environment, End‑User)](./README_VENV.md)
 
-3. Install from PyPI
 
-    ```bash
-    pip install rr2graph
-    ```
-
-4. see the help information
-
-    ```bash
-    rr2graph -h
-    ```
-
-5. Verify the installation
-
-    ```bash
-    rr2graph --info
-    ```
-
-6. Generate test data
-
-    ```bash
-    rr2graph -g
-    ```
-
-    This creates a file: `test_rr_data.xlsx`
-
-7. Generate example plots
-
-    ```bash
-    rr2graph -e test_rr_data.xlsx -n 3
-    ```
-
-    The generated plots will appear in the directory: `plots/`
 
 ## 🚀 Installation
+
+As I'm working with `pipenv`, the rest of the documentation is for `pipenv` users:
 
 1. Ensure you are in the project root
 

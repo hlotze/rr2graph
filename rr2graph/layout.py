@@ -49,9 +49,9 @@ def get_needed_fig_and_axs_array(num_of_months: int):
             width_ratios=width_ratio,
             layout="constrained",
         )
-    else:                                                           # pragma: no cover
-        sys.exit(                                                   # pragma: no cover
+    else:  # pragma: no cover
+        sys.exit(  # pragma: no cover
             "Error: The number of months must be between 1 and 6 "  # pragma: no cover
-            "to generate the plots with the given layout."          # pragma: no cover
-        )                                                           # pragma: no cover
+            "to generate the plots with the given layout."  # pragma: no cover
+        )  # pragma: no cover
     return fig, axs

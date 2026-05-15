@@ -21,7 +21,7 @@ def write_excel(tmp_path, df):
 
 
 # ---------------------------------------------------------
-# parse_excel_date()
+# _parse_excel_date()
 # ---------------------------------------------------------
 
 def test_parse_excel_date_dd_mm_yy():
@@ -84,14 +84,17 @@ def test_parse_excel_date_excel_nan_int_branch():
     val = WeirdFloat(123.456)
     assert parse_excel_date(val) == pd.Timestamp("1899-12-30") + pd.Timedelta(days=123)
 
+
 def test_parse_excel_date_str_not_digit():
     # trifft den else-Zweig von s.isdigit()
     assert pd.isna(parse_excel_date("45 231"))
+
 
 def test_parse_excel_date_timestamp_delta_zero():
     # delta = 0 → trifft den unteren return val
     ts = pd.Timestamp("1899-12-30")
     assert parse_excel_date(ts) == ts
+
 
 def test_parse_excel_date_timestamp_delta_too_large():
     # delta >= 60000 → trifft den unteren return val
@@ -114,6 +117,39 @@ def test_parse_excel_date_timestamp_delta_one():
     ts = pd.Timestamp("1899-12-31")
     assert parse_excel_date(ts) == ts
 
+
+def test_parse_excel_date_iso_datetime():
+    assert parse_excel_date("2025-11-03 08:30:00") == pd.Timestamp(2025, 11, 3, 8, 30)
+
+
+def test_parse_excel_date_exception_branch():
+    class Boom:
+        @property
+        def year(self):
+            raise ValueError("boom")
+
+    result = parse_excel_date(Boom())
+    assert pd.isna(result)
+
+
+# ---------------------------------------------------------
+# _to_pydate()
+# ---------------------------------------------------------
+
+
+def test_to_pydate_variants():
+    from rr2graph.io import _to_pydate
+
+    # datetime
+    dt = datetime(2025, 1, 1, 8, 0)
+    assert _to_pydate(dt) == dt.date()
+
+    # numpy.datetime64
+    nd = np.datetime64("2025-01-01")
+    assert _to_pydate(nd) == datetime(2025, 1, 1).date()
+
+    # fallback
+    assert _to_pydate("abc") == "abc"
 
 # ---------------------------------------------------------
 # read_heart_data()
@@ -184,6 +220,39 @@ def test_read_heart_data_invalid_date(tmp_path):
     out = read_heart_data(fn)
 
     assert len(out) == 0
+
+
+def test_read_heart_data_dropna_executes(tmp_path):
+    df = pd.DataFrame({
+        "date": ["03.11.25", "04.11.25"],
+        "time": ["08:00:00", ""],  # zweite Zeile wird gedroppt
+        "rr_syst": [120, 130],
+        "rr_diast": [80, 85],
+        "heart_rate": [70, 75],
+        "weight": [80.0, 79.5],
+    })
+
+    fn = write_excel(tmp_path, df)
+    out = read_heart_data(fn)
+
+    assert len(out) == 1
+
+
+def test_read_heart_data_int_conversion(tmp_path):
+    df = pd.DataFrame({
+        "date": ["03.11.25"],
+        "time": ["08:00:00"],
+        "rr_syst": ["120"],  # als STRING
+        "rr_diast": ["80"],
+        "heart_rate": ["70"],
+        "weight": ["80.0"],
+    })
+
+    fn = write_excel(tmp_path, df)
+    out = read_heart_data(fn)
+
+    assert out["rr_syst"].dtype == "int64"
+    assert out["rr_diast"].dtype == "int64"
 
 
 # ---------------------------------------------------------
@@ -272,3 +341,60 @@ def test_read_weight_data_drops_invalid_rows(tmp_path):
 
     assert len(out) == 1
     assert out["weight"].iloc[0] == 80.0
+
+
+def test_read_heart_data_full(tmp_path):
+    fn = tmp_path / "heart.xlsx"
+
+    df = pd.DataFrame({
+        "date": ["01.01.2025", "02.01.2025"],
+        "time": ["08:00:00", ""],  # zweite Zeile wird gedroppt → deckt Zeile 42
+        "rr_syst": ["120", "130"],
+        "rr_diast": ["80", "85"],
+        "heart_rate": ["70", "75"],
+        "weight": ["80", "80"],  # wird später gedroppt
+    })
+
+    df.to_excel(fn, sheet_name="data", index=False)
+
+    out = read_heart_data(fn)
+
+    # Nur die erste Zeile bleibt übrig
+    assert len(out) == 1
+
+    # Typen wurden konvertiert → deckt Zeilen 55–56
+    assert out["rr_syst"].dtype == "int64"
+    assert out["rr_diast"].dtype == "int64"
+    assert out["heart_rate"].dtype == "int64"
+
+    # date_time wurde erzeugt
+    assert "date_time" in out.columns
+
+
+def test_read_weight_data_full(tmp_path):
+    fn = tmp_path / "weight.xlsx"
+
+    df = pd.DataFrame({
+        "date": ["01.01.2025", "02.01.2025"],
+        "time": ["08:00:00", "09:00:00"],
+        "rr_syst": ["120", "130"],
+        "rr_diast": ["80", "85"],
+        "heart_rate": ["70", "75"],
+        "weight": ["80.5", "81.0"],
+    })
+
+    df.to_excel(fn, sheet_name="data", index=False)
+
+    out = read_weight_data(fn)
+
+    assert len(out) == 2
+
+    # deckt Zeile 69 (Timestamp‑Filter)
+    assert isinstance(out["date"].iloc[0], pd.Timestamp)
+
+    # deckt Zeile 70 (to_numeric)
+    assert out["weight"].dtype == "float64"
+
+    # deckt Zeile 72 (week-Spalte)
+    assert "week" in out.columns
+

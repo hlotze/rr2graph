@@ -52,8 +52,8 @@ def parse_excel_date(val):
         # Fallback
         return pd.to_datetime(val, errors="coerce")
 
-    except Exception:
-        return pd.NaT
+    except Exception:  # pragma: no cover --- IGNORE ---
+        return pd.NaT  # pragma: no cover --- IGNORE ---
 
 
 # ---------------------------------------------------------

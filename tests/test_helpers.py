@@ -10,7 +10,7 @@ from rr2graph.helpers import (
     ensure_output_dirs,
     binwidth_2_bins,
     calculate_weekly_ticks,
-    print_info,
+    print_info
 )
 
 
@@ -117,3 +117,45 @@ def test_print_info_runs(capsys):
     print_info()
     captured = capsys.readouterr()
     assert "rr2graph info" in captured.out
+
+
+def test_print_info_no_config(monkeypatch, capsys, tmp_path):
+    # Arbeitsverzeichnis auf tmp_path setzen (ohne config.yaml)
+    monkeypatch.chdir(tmp_path)
+
+    print_info()
+    out = capsys.readouterr().out
+
+    assert "Keine Config-Datei gefunden" in out
+
+
+def test_print_info_with_config(monkeypatch, capsys, tmp_path):
+    # config.yaml erzeugen
+    cfg = tmp_path / "config.yaml"
+    cfg.write_text("excel: test.xlsx\nnum_of_months: 3\noutput: out/")
+
+    monkeypatch.chdir(tmp_path)
+
+    print_info()
+    out = capsys.readouterr().out
+
+    assert "Gefundene Config-Datei" in out
+    assert "Excel-Datei" in out
+    assert "Monate" in out
+    assert "Output-Ordner" in out
+
+
+def test_print_info_config_exception(monkeypatch, capsys, tmp_path):
+    from rr2graph.helpers import print_info
+
+    # Arbeitsverzeichnis wechseln
+    monkeypatch.chdir(tmp_path)
+
+    # config.yaml erzeugen, aber mit ungültigem (binärem) Inhalt
+    cfg = tmp_path / "config.yaml"
+    cfg.write_bytes(b"\x00\xFF\x00\xFFINVALID YAML\x00")
+
+    print_info()
+    out = capsys.readouterr().out
+
+    assert "Warnung: Config konnte nicht gelesen werden" in out

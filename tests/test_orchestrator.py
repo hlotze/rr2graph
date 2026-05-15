@@ -1,8 +1,10 @@
 from datetime import datetime
 
-# import os
+import os
 import pytest
 import pandas as pd
+
+import matplotlib.pyplot as plt
 
 from rr2graph.orchestrator import generate_monthly_plots
 
@@ -108,3 +110,30 @@ def test_generate_monthly_plots_invalid_months():
 
     with pytest.raises(SystemExit):
         generate_monthly_plots("histogram", 7, df, df_w, "plots")
+
+
+def test_generate_monthly_plots_closes_real_figure(tmp_path):
+    # Minimal gültige DataFrames
+    df_heart = pd.DataFrame({
+        "date_time": pd.to_datetime(["2024-01-01 10:00:00"]),
+        "rr_syst": [120],
+        "rr_diast": [80],
+        "heart_rate": [70],
+        "week": [1],
+    })
+
+    df_weight = pd.DataFrame({
+        "date": pd.to_datetime(["2024-01-01"]),
+        "weight": [80.0],
+        "week": [1],
+    })
+
+    out = tmp_path
+
+    # WICHTIG: kein Monkeypatch → echte Figure wird erzeugt
+    files = generate_monthly_plots("histogram", 1, df_heart, df_weight, out)
+
+    # Dateien wurden erzeugt
+    assert len(files) == 3
+    for f in files:
+        assert f.endswith((".png", ".pdf", ".svg"))

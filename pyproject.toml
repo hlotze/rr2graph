@@ -3,7 +3,7 @@ name = "rr2graph"
 version = "0.2.0"
 description = "A lightweight health data analytics tool for monthly time-series visualization and distribution analysis."
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 license = { text = "MIT" }
 
 authors = [
@@ -18,6 +18,30 @@ dependencies = [
     "pyyaml",
     "openpyxl",
     "xlsxwriter"
+]
+
+classifiers = [
+    # License
+    "License :: OSI Approved :: MIT License",
+
+    # Audience
+    "Intended Audience :: Developers",
+    "Intended Audience :: Healthcare Industry",
+    "Intended Audience :: Science/Research",
+
+    # Topics
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Utilities",
+
+    # Python versions
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 
 [project.urls]

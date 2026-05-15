@@ -1,13 +1,20 @@
 # 📘 rr2graph — Visualize Blood Pressure, Pulse, and Weight Data
 
 [![PyPI Version](https://img.shields.io/pypi/v/rr2graph)](https://pypi.org/project/rr2graph/)
+![Python Versions](https://img.shields.io/pypi/pyversions/rr2graph)
+![Downloads](https://img.shields.io/pypi/dm/rr2graph)
+
 ![CI Status](https://github.com/hlotze/rr2graph/actions/workflows/python-ci.yml/badge.svg)
 [![Coverage](https://codecov.io/gh/hlotze/rr2graph/branch/main/graph/badge.svg)](https://codecov.io/gh/hlotze/rr2graph)
+
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Release](https://img.shields.io/github/v/release/hlotze/rr2graph)
+![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)
+
 [![GHCR](https://img.shields.io/badge/GHCR-rr2graph-blue?logo=github)](https://github.com/hlotze/rr2graph/pkgs/container/rr2graph)
 ![Docker Pulls](https://img.shields.io/badge/GHCR%20Pulls-Automatic-blue?logo=docker)
 ![Docker Image](https://img.shields.io/badge/Multi--Arch-AMD64%20%7C%20ARM64-green?logo=docker)
+
 
 `rr2graph` is a lightweight command‑line tool for processing and visualizing blood pressure, pulse, and weight data stored in Excel files.  
 It generates monthly plots (box‑swarm, scatter, histogram, violin) and exports them automatically as PNG, PDF, and SVG.

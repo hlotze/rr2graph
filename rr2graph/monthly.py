@@ -1,26 +1,83 @@
 """collection of the plot functions"""
 
-# import numpy as np
+from __future__ import annotations
+from typing import Callable, Sequence
+from pathlib import Path
+
 import pandas as pd
-import matplotlib.axes
+import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
+
+from .layout import get_needed_fig_and_axs_array
+
 from .plots.scatter import generate_scatter_plot
-from .plots.hist import generate_rr_hist_plot, generate_heart_rate_hist_plot
-from .plots.violin import generate_rr_violin_plot, generate_heart_rate_violin_plot
+from .plots.hist import (
+    generate_rr_hist_plot,
+    generate_heart_rate_hist_plot,
+)
+from .plots.violin import (
+    generate_rr_violin_plot,
+    generate_heart_rate_violin_plot,
+)
 from .plots.box_swarm import (
     generate_rr_box_swarm_plot,
     generate_heart_rate_box_swarm_plot,
 )
 
+# ---------------------------------------------------------
+# Private Helpers
+# ---------------------------------------------------------
+
+
+RowFunc = Callable[[pd.Period, Sequence[Axes], pd.DataFrame, pd.DataFrame], None]
+
+
+def _ensure_output_dirs(base_dir: str | Path) -> dict[str, Path]:
+    base = Path(base_dir)
+    dirs = {
+        "png": base / "png",
+        "pdf": base / "pdf",
+        "svg": base / "svg",
+    }
+    for d in dirs.values():
+        d.mkdir(parents=True, exist_ok=True)
+    return dirs
+
+
+def _build_output_paths(subdirs: dict[str, Path], filename: str) -> dict[str, Path]:
+    return {
+        "png": subdirs["png"] / f"{filename}.png",
+        "pdf": subdirs["pdf"] / f"{filename}.pdf",
+        "svg": subdirs["svg"] / f"{filename}.svg",
+    }
+
+
+def _filter_last_months(
+    df: pd.DataFrame, date_col: str, num_months: int
+) -> pd.DataFrame:
+    end_date = df[date_col].max()
+    start_date = end_date - pd.DateOffset(months=num_months)
+    return df[(df[date_col] >= start_date) & (df[date_col] <= end_date)]
+
+
+def _extract_months(df_heart: pd.DataFrame, num_months: int) -> list[pd.Period]:
+    months = df_heart["date_time"].dt.to_period("M").sort_values().unique()
+    return list(months[-num_months:])
+
+
+# ---------------------------------------------------------
+# Plot‑Row‑Funktionen
+# ---------------------------------------------------------
+
 
 def gen_row_of_3_grapics_for_one_month_histo(
     month: pd.Period,
-    axs: matplotlib.axes.Axes,
+    axs: Sequence[Axes],
     df_heart: pd.DataFrame,
     df_weight: pd.DataFrame,
 ) -> None:
-    """generate 3 axes in a row for on month's graphics
-    i.e. scatter, histo, histo"""
-
+    """Generates a row of 3 graphics for one month:
+    scatter, rr histogram, heart rate histogram"""
     generate_scatter_plot(
         df_heart[df_heart["date_time"].dt.to_period("M") == month],
         df_weight[df_weight["date"].dt.to_period("M") == month],
@@ -36,13 +93,12 @@ def gen_row_of_3_grapics_for_one_month_histo(
 
 def gen_row_of_3_grapics_for_one_month_violin(
     month: pd.Period,
-    axs: matplotlib.axes.Axes,
+    axs: Sequence[Axes],
     df_heart: pd.DataFrame,
     df_weight: pd.DataFrame,
 ) -> None:
-    """generate 3 axes in a row for on month's graphics
-    i.e. scatter, violin, violin"""
-
+    """Generates a row of 3 graphics for one month:
+    scatter, rr violin, heart rate violin"""
     generate_scatter_plot(
         df_heart[df_heart["date_time"].dt.to_period("M") == month],
         df_weight[df_weight["date"].dt.to_period("M") == month],
@@ -58,13 +114,12 @@ def gen_row_of_3_grapics_for_one_month_violin(
 
 def gen_row_of_3_grapics_for_one_month_box_swarm(
     month: pd.Period,
-    axs: matplotlib.axes.Axes,
+    axs: Sequence[Axes],
     df_heart: pd.DataFrame,
     df_weight: pd.DataFrame,
 ) -> None:
-    """generate 3 axes in a row for on month's graphics
-    i.e. scatter, box_swarm, box_swarm"""
-
+    """Generates a row of 3 graphics for one month:
+    scatter, rr box_swarm, heart rate box_swarm"""
     generate_scatter_plot(
         df_heart[df_heart["date_time"].dt.to_period("M") == month],
         df_weight[df_weight["date"].dt.to_period("M") == month],
@@ -78,72 +133,88 @@ def gen_row_of_3_grapics_for_one_month_box_swarm(
     )
 
 
+# ---------------------------------------------------------
+# gen_req_plot_type
+# ---------------------------------------------------------
+
+
 def gen_req_plot_type(
     plot_type: str,
     num_of_months: int,
     df_heart: pd.DataFrame,
     df_weight: pd.DataFrame,
-    axs,
+    axs: Axes | Sequence[Axes],
 ) -> str:
-    """orchestration for generation of
-    the requested plot_types for
-    for the num_of_months"""
+    """Generates the requested plot type for the given data and axes."""
 
-    match plot_type:
-        case "histogram":
-            row_func = gen_row_of_3_grapics_for_one_month_histo
-        case "violin":
-            row_func = gen_row_of_3_grapics_for_one_month_violin
-        case "box_swarm":
-            row_func = gen_row_of_3_grapics_for_one_month_box_swarm
-        case _:
-            raise KeyError(f"Unknown plot_type: {plot_type}")
+    dispatch: dict[str, RowFunc] = {
+        "histogram": gen_row_of_3_grapics_for_one_month_histo,
+        "violin": gen_row_of_3_grapics_for_one_month_violin,
+        "box_swarm": gen_row_of_3_grapics_for_one_month_box_swarm,
+    }
 
-    # -----------------------------------------
-    # es sollen nur die Daten der aktuellsten
-    # num_of_months (1..6) genommen werden
-    # -----------------------------------------
-    # Daten filtern - df_heart
-    end_date = df_heart["date_time"].max()
-    start_date = end_date - pd.DateOffset(months=num_of_months)
-    # Filter auf Daten anwenden
-    df_heart = df_heart[
-        (df_heart["date_time"] >= start_date) & (df_heart["date_time"] <= end_date)
+    if plot_type not in dispatch:
+        raise KeyError(f"Unknown plot_type: {plot_type}")
+
+    row_func = dispatch[plot_type]
+
+    df_heart = _filter_last_months(df_heart, "date_time", num_of_months)
+    df_weight = _filter_last_months(df_weight, "date", num_of_months)[
+        ["date", "weight"]
     ]
 
-    # Daten filtern - df_weight
-    end_date = df_weight["date"].max()
-    start_date = end_date - pd.DateOffset(months=num_of_months)
-    df_weight = df_weight[
-        (df_weight["date"] >= start_date) & (df_weight["date"] <= end_date)
-    ][["date", "weight"]]
+    months = _extract_months(df_heart, num_of_months)
 
-    # Monate im gefilterten Zeitraum extrahieren (ältester → neuester)
-    # als pd.Period
-    months = (df_heart["date_time"].dt.to_period("M").sort_values().unique())[
-        -num_of_months:
-    ]  # nur die letzten num_of_months nehmen
-
-    # 1-Monats-Fall
     if len(months) == 1:
         month = months[0]
         row_func(month, axs, df_heart, df_weight)
-
         start_month = month.start_time
-        fn = f"({start_month.strftime('%Y-%m')}) " f"per month data and {plot_type}"
+        return f"({start_month.strftime('%Y-%m')}) " f"per month data and {plot_type}"
 
-    # Mehr-Monats-Fall
-    else:
-        for axs_pos, month in enumerate(months):
-            row_func(month, axs[axs_pos], df_heart, df_weight)
+    for ax, month in zip(axs, months):
+        row_func(month, ax, df_heart, df_weight)
 
-        start_month = months[0].start_time
-        end_month = months[-1].end_time
+    start_month = months[0].start_time
+    end_month = months[-1].end_time
 
-        fn = (
-            f"({start_month.strftime('%Y-%m')}__"
-            f"{end_month.strftime('%Y-%m')} {len(months)} months) "
-            f"per month data and {plot_type}"
-        )
+    return (
+        f"({start_month.strftime('%Y-%m')}__"
+        f"{end_month.strftime('%Y-%m')} {len(months)} months) "
+        f"per month data and {plot_type}"
+    )
 
-    return fn
+
+# ---------------------------------------------------------
+# generate_monthly_plots
+# ---------------------------------------------------------
+
+
+def generate_monthly_plots(
+    plot_type: str,
+    num_of_months: int,
+    df_heart,
+    df_weight,
+    out_dir: str | Path,
+) -> list[str]:
+    """Generates the requested plot type for
+    the last num_of_months months and
+    saves them to the specified output directory."""
+    fig, axs = get_needed_fig_and_axs_array(num_of_months)
+
+    filename = gen_req_plot_type(
+        plot_type=plot_type,
+        num_of_months=num_of_months,
+        df_heart=df_heart,
+        df_weight=df_weight,
+        axs=axs,
+    )
+
+    subdirs = _ensure_output_dirs(out_dir)
+    paths = _build_output_paths(subdirs, filename)
+
+    for fmt, path in paths.items():
+        fig.savefig(path, format=fmt)
+
+    plt.close(fig)
+
+    return [str(p) for p in paths.values()]

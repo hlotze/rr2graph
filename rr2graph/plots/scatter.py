@@ -1,7 +1,10 @@
 """functions for the scatter plot"""
 
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.axes
 from matplotlib.ticker import AutoMinorLocator
+
 import pandas as pd
 
 from ..helpers import calculate_weekly_ticks

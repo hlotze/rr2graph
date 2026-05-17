@@ -49,11 +49,13 @@ my_tests.ipynb
 test_rr2graph.ipynb
 README.pdf
 my_TODOs.md
+DockerFile_*
 
 # Test data
 rr_data.xlsx
 test_rr_data.xlsx
 test_config.yaml
+config_docker.yaml
 
 # Local configs
 config.yaml

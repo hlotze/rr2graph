@@ -3,10 +3,14 @@
 import os
 
 # from typing import List
+
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 
 # import pandas as pd
+
 # from .helpers import ensure_output_dirs
 from .layout import get_needed_fig_and_axs_array
 from .monthly import gen_req_plot_type

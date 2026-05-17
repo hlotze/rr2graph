@@ -1,8 +1,12 @@
 """functions for the violin plots"""
 
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.axes
-import pandas as pd
 import seaborn as sns
+
+import pandas as pd
+
 
 
 def generate_rr_violin_plot(

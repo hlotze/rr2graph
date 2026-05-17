@@ -1,9 +1,10 @@
 """the layouter function generates to fig and axs-array for the plots"""
 
 import sys
-import matplotlib.pyplot as plt
 
-# import matplotlib.axes
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 
 
 def get_needed_fig_and_axs_array(num_of_months: int):
@@ -43,7 +44,8 @@ def get_needed_fig_and_axs_array(num_of_months: int):
         fig, axs = plt.subplots(
             nrows=num_of_months,
             ncols=3,
-            figsize=(a3_portrait_inches[0], a3_portrait_inches[1] * num_of_months / 6),
+            figsize=(a3_portrait_inches[0],
+                     a3_portrait_inches[1] * num_of_months / 6),
             dpi=600,
             sharey=True,
             width_ratios=width_ratio,
@@ -51,7 +53,8 @@ def get_needed_fig_and_axs_array(num_of_months: int):
         )
     else:  # pragma: no cover
         sys.exit(  # pragma: no cover
-            "Error: The number of months must be between 1 and 6 "  # pragma: no cover
+            "Error: The number of months "  # pragma: no cover
+            "must be between 1 and 6 "      # pragma: no cover
             "to generate the plots with the given layout."  # pragma: no cover
         )  # pragma: no cover
     return fig, axs

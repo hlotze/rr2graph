@@ -1,6 +1,7 @@
 """functions for the scatter plot"""
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.axes
 from matplotlib.ticker import AutoMinorLocator

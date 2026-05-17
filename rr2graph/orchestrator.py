@@ -5,6 +5,7 @@ import os
 # from typing import List
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure

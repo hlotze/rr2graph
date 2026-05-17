@@ -7,6 +7,7 @@ from pathlib import Path
 import pandas as pd
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
@@ -32,10 +33,7 @@ from .plots.box_swarm import (
 # ---------------------------------------------------------
 
 
-RowFunc = Callable[[pd.Period,
-                    Sequence[Axes],
-                    pd.DataFrame,
-                    pd.DataFrame], None]
+RowFunc = Callable[[pd.Period, Sequence[Axes], pd.DataFrame, pd.DataFrame], None]
 
 
 def _ensure_output_dirs(base_dir: str | Path) -> dict[str, Path]:
@@ -50,10 +48,7 @@ def _ensure_output_dirs(base_dir: str | Path) -> dict[str, Path]:
     return dirs
 
 
-def _build_output_paths(
-    subdirs: dict[str, Path],
-    filename: str
-) -> dict[str, Path]:
+def _build_output_paths(subdirs: dict[str, Path], filename: str) -> dict[str, Path]:
     return {
         "png": subdirs["png"] / f"{filename}.png",
         "pdf": subdirs["pdf"] / f"{filename}.pdf",
@@ -69,10 +64,7 @@ def _filter_last_months(
     return df[(df[date_col] >= start_date) & (df[date_col] <= end_date)]
 
 
-def _extract_months(
-    df_heart: pd.DataFrame,
-    num_months: int
-) -> list[pd.Period]:
+def _extract_months(df_heart: pd.DataFrame, num_months: int) -> list[pd.Period]:
     months = df_heart["date_time"].dt.to_period("M").sort_values().unique()
     return list(months[-num_months:])
 

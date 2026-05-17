@@ -1,6 +1,7 @@
 """functions for histo plots"""
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.axes
 

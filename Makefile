@@ -38,6 +38,7 @@ help:
 	@echo "  make ci-test          — Run pytest with coverage"
 	@echo ""
 	@echo "  make format           — Auto-format code (ruff + black)"
+	@echo "  make black-fix        — Run Black auto-correction only"
 	@echo "  make clean            — Remove build + cache artifacts"
 	@echo "  make build            — Build wheel + sdist"
 	@echo "  make release          — Build release artifacts"
@@ -54,7 +55,6 @@ help:
 	@echo "  make man              — View manpage locally"
 	@echo ""
 
-
 # ---------------------------------------------------------
 # Developer Setup
 # ---------------------------------------------------------
@@ -64,7 +64,6 @@ setup-dev:
 	@echo "📦 Installing development dependencies..."
 	@pipenv install --dev
 	@echo "✅ Dev environment ready"
-
 
 # ---------------------------------------------------------
 # CI Workflow
@@ -88,18 +87,21 @@ ci-test:
 	@pipenv run pytest --cov=rr2graph --cov-branch --cov-report=xml --cov-report=term-missing tests
 	@pipenv run coverage html
 
-	
 # ---------------------------------------------------------
 # Formatting
 # ---------------------------------------------------------
 
-.PHONY: format
+.PHONY: format black-fix
 format:
-	@echo "✨ Auto-formatting code..."
+	@echo "✨ Auto-formatting code (Ruff + Black)..."
 	@pipenv run ruff check rr2graph --fix
 	@pipenv run black rr2graph
 	@echo "✅ Code formatted"
 
+black-fix:
+	@echo "🎨 Running Black auto-correction..."
+	@pipenv run black rr2graph
+	@echo "✅ Black formatting applied"
 
 # ---------------------------------------------------------
 # Build + Release
@@ -130,7 +132,6 @@ release: build
 	@echo "Or to TestPyPI:"
 	@echo "  pipenv run twine upload --repository testpypi dist/*"
 
-
 # ---------------------------------------------------------
 # Manpage Installation / Uninstallation
 # ---------------------------------------------------------
@@ -146,7 +147,6 @@ uninstall-man:
 
 man:
 	@man ./$(MANPAGE)
-
 
 # ---------------------------------------------------------
 # Version bumping (patch/minor/major)
@@ -165,7 +165,6 @@ version-major:
 	@echo "🔧 Bumping major version..."
 	@pipenv run python -m rr2graph.tools.bump_version major
 
-
 # ---------------------------------------------------------
 # TestPyPI Upload
 # ---------------------------------------------------------
@@ -175,7 +174,6 @@ publish-test: build
 	@echo "🚀 Uploading to TestPyPI..."
 	@pipenv run twine upload --repository testpypi dist/*
 	@echo "✅ Uploaded to TestPyPI"
-
 
 # ---------------------------------------------------------
 # PyPI Upload

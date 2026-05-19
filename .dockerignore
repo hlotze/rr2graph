@@ -1,0 +1,113 @@
+.git
+.github
+
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+.ipynb_checkpoints
+*.ipynb
+
+tests
+docs
+notebooks
+
+venv
+.venv
+env
+
+dist
+build
+*.egg-info
+
+.DS_Store
+
+.pytest_cache
+.mypy_cache
+.ruff_cache
+
+coverage.xml
+htmlcov
+
+*.xlsx
+*.csv
+*.png
+*.pdf
+
+# ============================================
+# Python / Pipenv / Build
+# ============================================
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Pipenv
+Pipfile.lock
+
+# venv
+venv/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Coverage
+coverage.xml
+.coverage
+htmlcov/
+coverage/
+
+# pytest cache
+.pytest_cache/
+
+# ruff cache
+.ruff_cache/
+
+# Jupyter
+*.ipynb_checkpoints/
+
+# ============================================
+# Project-specific exclusions
+# ============================================
+
+# Backups and old versions
+__bak/
+
+# Generated plots at toplevel dir
+/plots/
+
+# not directly project related
+rr_corr.ipynb
+my_tests.ipynb
+test_rr2graph.ipynb
+README.pdf
+my_TODOs.md
+DockerFile_*
+
+# Test data
+rr_data.xlsx
+test_rr_data.xlsx
+test_config.yaml
+config_docker.yaml
+
+# Local configs
+config.yaml
+config_od.yaml
+
+# Manpage build artifacts (if any)
+man/*.gz
+
+# ============================================
+# OS / Editor
+# ============================================
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# VS Code
+.vscode/

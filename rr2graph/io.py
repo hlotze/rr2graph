@@ -31,14 +31,11 @@ def parse_excel_date(val: object) -> Optional[pd.Timestamp]:
     """
     Parse heterogeneous Excel-compatible date values.
 
-    Supports multiple input formats commonly found in exported
-    spreadsheet datasets.
-
     Supported formats:
         - Excel serial date numbers
         - ISO date strings
         - ISO datetime strings
-        - German date formats
+        - German localized date formats
         - pandas Timestamp objects
         - numpy datetime objects
 
@@ -47,59 +44,64 @@ def parse_excel_date(val: object) -> Optional[pd.Timestamp]:
             Raw date value originating from Excel or pandas.
 
     Returns:
-        pd.Timestamp | pd.NaT:
-            Parsed pandas timestamp or NaT if parsing fails.
-
-    Raises:
-        ValueError:
-            Raised internally when invalid date formats are detected.
-
-    Examples:
-        Parse German date format:
-
-            parse_excel_date("31.12.2025")
-
-        Parse ISO datetime:
-
-            parse_excel_date("2025-12-31 08:30:00")
+        Optional[pd.Timestamp]:
+            Parsed pandas timestamp or ``None`` if parsing fails.
     """
     try:
-        excel_origin = pd.Timestamp("1899-12-30")
+        # Missing values.
+        if val is None or pd.isna(val):
+            return None
 
-        # Case 1: Excel serial date as integer or float.
-        if isinstance(val, (int, float)) and not pd.isna(val):
-            return excel_origin + pd.to_timedelta(int(val), unit="D")
-
-        # Case 2: Excel serial date as string.
-        if isinstance(val, str):
-            s = val.strip()
-            if s.isdigit():
-                return excel_origin + pd.to_timedelta(int(s), unit="D")
-
-        # Case 3: Value already parsed as pandas Timestamp.
+        # Already parsed pandas timestamp.
         if isinstance(val, pd.Timestamp):
-            delta = (val - excel_origin).days
-            if 1 < delta < 60000:
-                return excel_origin + pd.to_timedelta(delta, unit="D")
             return val
 
-        # Case 4: Standard date string formats.
+        # Native Python datetime.
+        if isinstance(val, datetime):
+            return pd.Timestamp(val)
+
+        # NumPy datetime.
+        if isinstance(val, np.datetime64):
+            return pd.to_datetime(val, errors="coerce")
+
+        # Excel serial date numbers.
+        if isinstance(val, (int, float)):
+            return pd.to_datetime(val, unit="D", origin="1899-12-30", errors="coerce")
+
+        # String handling.
         if isinstance(val, str):
             s = val.strip()
 
-            # 4A: ISO datetime format.
-            if re.match(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$", s):
-                return pd.to_datetime(s, format="%Y-%m-%d %H:%M:%S", errors="coerce")
+            if not s:
+                return None
 
-            # 4B: ISO date format.
-            if re.match(r"^\d{4}-\d{2}-\d{2}$", s):
-                return pd.to_datetime(s, format="%Y-%m-%d", errors="coerce")
+            # Excel serial date stored as string.
+            if s.isdigit():
+                return pd.to_datetime(
+                    int(s),
+                    unit="D",
+                    origin="1899-12-30",
+                    errors="coerce",
+                )
 
-            # 4C: German localized date formats.
+            # German localized format.
             if re.match(r"^\d{1,2}\.\d{1,2}\.\d{2,4}$", s):
                 return pd.to_datetime(s, dayfirst=True, errors="coerce")
 
-        # Final fallback parser.
+            # ISO-like formats exported by Excel.
+            # Examples:
+            #   2026-01-31
+            #   2026-01-31 08:30
+            #   2026-01-31 08:30:00
+            #   2026-01-31T08:30:00
+            #   2026-01-31 08:30:00.000
+            if re.match(r"^\d{4}-\d{2}-\d{2}", s):
+                return pd.to_datetime(s, dayfirst=False, errors="coerce")
+
+            # Generic fallback parsing.
+            return pd.to_datetime(s, dayfirst=True, errors="coerce")
+
+        # Final generic fallback.
         return pd.to_datetime(val, errors="coerce")
 
     except Exception:  # pragma: no cover --- IGNORE ---
@@ -189,6 +191,11 @@ def read_heart_data(fn: str) -> pd.DataFrame:
 
     # 2. Robustly parse date values.
     df["date"] = df["date"].apply(parse_excel_date)
+
+    # DEBUG: inspect parsed date values.
+    # print("\nDEBUG parsed dates:")
+    # print(df[["date"]].head(10))
+    # print(df["date"].apply(type).head(10))
 
     # 3. Robustly parse time values.
     df["time"] = pd.to_datetime(df["time"], format="%H:%M:%S", errors="coerce").dt.time

@@ -88,7 +88,8 @@ def test_parse_excel_date_excel_nan_int_branch():
     class WeirdFloat(float):
         pass
     val = WeirdFloat(123.456)
-    assert parse_excel_date(val) == pd.Timestamp("1899-12-30") + pd.Timedelta(days=123)
+    expected = pd.Timestamp("1899-12-30") + pd.Timedelta(days=123.456)
+    assert abs(parse_excel_date(val) - expected) < pd.Timedelta(microseconds=1)
 
 
 def test_parse_excel_date_str_not_digit():
@@ -140,6 +141,19 @@ def test_parse_excel_date_exception_branch():
 
     result = parse_excel_date(Boom())
     assert pd.isna(result)
+
+def test_parse_excel_date_python_datetime():
+    dt = datetime(2025, 11, 3, 8, 30)
+    assert parse_excel_date(dt) == pd.Timestamp(dt)
+
+
+def test_parse_excel_date_numpy_datetime64():
+    nd = np.datetime64("2025-11-03")
+    assert parse_excel_date(nd) == pd.Timestamp("2025-11-03")
+
+
+def test_parse_excel_date_empty_string():
+    assert parse_excel_date("") is None
 
 
 # ---------------------------------------------------------

@@ -11,6 +11,7 @@ seaborn = "*"
 pyyaml = "*"
 openpyxl = "*"
 xlsxwriter = "*"
+pdoc = "*"
 
 [dev-packages]
 flake8 = "*"

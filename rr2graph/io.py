@@ -16,6 +16,7 @@ mixed user-entered date formats.
 """
 
 from datetime import datetime
+from typing import Optional
 import re
 
 import numpy as np
@@ -26,7 +27,7 @@ import pandas as pd
 # ---------------------------------------------------------
 
 
-def parse_excel_date(val: object) -> pd.Timestamp | pd.NaT:
+def parse_excel_date(val: object) -> Optional[pd.Timestamp]:
     """
     Parse heterogeneous Excel-compatible date values.
 
@@ -102,7 +103,7 @@ def parse_excel_date(val: object) -> pd.Timestamp | pd.NaT:
         return pd.to_datetime(val, errors="coerce")
 
     except Exception:  # pragma: no cover --- IGNORE ---
-        return pd.NaT  # pragma: no cover --- IGNORE ---
+        return None  # pragma: no cover --- IGNORE ---
 
 
 # ---------------------------------------------------------

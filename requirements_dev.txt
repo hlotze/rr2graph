@@ -1,10 +1,20 @@
+# Testing
 pytest
-flake8
-pylint
-black
+pytest-cov
+coverage
+
+# Linting / formatting (modern stack)
 ruff
+black
+
+# Dev environment / interactive work
 ipython
 ipykernel
 jupyterlab
+
+# Packaging / release tools
 build
 twine
+
+# Optional OSS tooling (recommended)
+pre-commit

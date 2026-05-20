@@ -1,113 +1,90 @@
+# ============================================
+# Git / VCS
+# ============================================
+
 .git
 .github
 
-__pycache__
-*.pyc
-*.pyo
-*.pyd
-
-.ipynb_checkpoints
-*.ipynb
-
-tests
-docs
-notebooks
-
-venv
-.venv
-env
-
-dist
-build
-*.egg-info
-
-.DS_Store
-
-.pytest_cache
-.mypy_cache
-.ruff_cache
-
-coverage.xml
-htmlcov
-
-*.xlsx
-*.csv
-*.png
-*.pdf
-
 # ============================================
-# Python / Pipenv / Build
+# Python runtime / bytecode
 # ============================================
 
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
 
-# Pipenv
-Pipfile.lock
+# ============================================
+# Virtual environments
+# ============================================
 
-# venv
 venv/
+.venv/
+env/
 
+# ============================================
 # Build artifacts
+# ============================================
+
 build/
 dist/
 *.egg-info/
 
-# Coverage
-coverage.xml
-.coverage
-htmlcov/
-coverage/
+# ============================================
+# Testing / CI artifacts
+# ============================================
 
-# pytest cache
 .pytest_cache/
-
-# ruff cache
 .ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
 
-# Jupyter
+# ============================================
+# Jupyter / notebooks
+# ============================================
+
+*.ipynb
 *.ipynb_checkpoints/
 
 # ============================================
-# Project-specific exclusions
+# Project runtime outputs
 # ============================================
 
-# Backups and old versions
-__bak/
+plots/
+*rr_data.xlsx
+*config*.yaml
 
-# Generated plots at toplevel dir
-/plots/
 
-# not directly project related
-rr_corr.ipynb
-my_tests.ipynb
-test_rr2graph.ipynb
-README.pdf
-my_TODOs.md
-DockerFile_*
-
-# Test data
-rr_data.xlsx
-test_rr_data.xlsx
-test_config.yaml
-config_docker.yaml
-
-# Local configs
-config.yaml
-config_od.yaml
-
-# Manpage build artifacts (if any)
+# generated docs / artifacts
 man/*.gz
+README.pdf
+
+# backups / temp
+__bak/
+my_TODOs.md
 
 # ============================================
-# OS / Editor
+# Logs
 # ============================================
 
-# macOS
+*.log
+
+# ============================================
+# OS / IDE
+# ============================================
+
 .DS_Store
+.vscode/
 **/.DS_Store
 
-# VS Code
-.vscode/
+# ============================================
+# Optional heavy files (be careful!)
+# ============================================
+
+# Uncomment only if Docker build context is too large
+# *.csv
+# *.png
+# *.pdf
+# *.xlsx

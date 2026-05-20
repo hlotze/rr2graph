@@ -1,7 +1,10 @@
-import pandas as pd
-import numpy as np
-import pytest
+"""Unit tests for rr2graph.io."""
+
 from datetime import datetime
+
+import numpy as np
+import pandas as pd
+import pytest
 
 from rr2graph.io import (
     parse_excel_date,
@@ -9,12 +12,13 @@ from rr2graph.io import (
     read_weight_data,
 )
 
+from pathlib import Path
 
-# ---------------------------------------------------------
-# Hilfsfunktion zum Schreiben einer Excel-Datei
-# ---------------------------------------------------------
 
-def write_excel(tmp_path, df):
+# Helper function for temporary Excel workbooks.
+
+def write_excel(tmp_path: Path, df: pd.DataFrame) -> Path:
+    """Write a temporary Excel workbook for integration tests."""
     fn = tmp_path / "test.xlsx"
     df.to_excel(fn, sheet_name="data", index=False)
     return fn
@@ -33,12 +37,14 @@ def test_parse_excel_date_dd_mm_yyyy():
 
 
 def test_parse_excel_date_iso_dayfirst_behavior():
-    # ISO-Date wird korrekt als YYYY-MM-DD interpretiert (3. November 2025)
+    """Ensure ISO date strings are parsed correctly."""
+    # ISO dates must preserve YYYY-MM-DD semantics.
     assert parse_excel_date("2025-11-03") == pd.Timestamp(2025, 11, 3)
 
 
 def test_parse_excel_date_excel_int():
-    # Excel-Seriendatum 45231 = 2023-11-01 (Pandas-Korrekte Interpretation)
+    """Validate Excel serial date conversion."""
+    # Excel serial date 45231 maps to 2023-11-01.
     assert parse_excel_date(45231) == pd.Timestamp(year=2023, month=11, day=1)
 
 
@@ -77,8 +83,8 @@ def test_parse_excel_date_timestamp_in_range():
 
 
 def test_parse_excel_date_excel_nan_int_branch():
-    # val = float("nan") geht in except → wir brauchen einen Wert,
-    # der isinstance(val, float) ist, aber pd.isna(val) == False
+    """Cover the float conversion fallback branch."""
+    # Cover the float conversion branch with a custom float subclass.
     class WeirdFloat(float):
         pass
     val = WeirdFloat(123.456)
@@ -86,18 +92,21 @@ def test_parse_excel_date_excel_nan_int_branch():
 
 
 def test_parse_excel_date_str_not_digit():
-    # trifft den else-Zweig von s.isdigit()
+    """Reject non-digit Excel serial strings."""
+    # Trigger the non-digit string branch.
     assert pd.isna(parse_excel_date("45 231"))
 
 
 def test_parse_excel_date_timestamp_delta_zero():
-    # delta = 0 → trifft den unteren return val
+    """Preserve timestamps near the Excel epoch."""
+    # Preserve timestamps at the Excel epoch boundary.
     ts = pd.Timestamp("1899-12-30")
     assert parse_excel_date(ts) == ts
 
 
 def test_parse_excel_date_timestamp_delta_too_large():
-    # delta >= 60000 → trifft den unteren return val
+    """Preserve timestamps outside Excel serial date ranges."""
+    # Preserve timestamps outside supported Excel date ranges.
     ts = pd.Timestamp("2100-01-01")
     assert parse_excel_date(ts) == ts
 
@@ -123,6 +132,7 @@ def test_parse_excel_date_iso_datetime():
 
 
 def test_parse_excel_date_exception_branch():
+    """Handle invalid date-like objects gracefully."""
     class Boom:
         @property
         def year(self):
@@ -138,17 +148,18 @@ def test_parse_excel_date_exception_branch():
 
 
 def test_to_pydate_variants():
+    """Validate datetime-to-date conversion helpers."""
     from rr2graph.io import _to_pydate
 
-    # datetime
+    # Standard datetime instance.
     dt = datetime(2025, 1, 1, 8, 0)
     assert _to_pydate(dt) == dt.date()
 
-    # numpy.datetime64
+    # NumPy datetime64 instance.
     nd = np.datetime64("2025-01-01")
     assert _to_pydate(nd) == datetime(2025, 1, 1).date()
 
-    # fallback
+    # Unsupported values fall back unchanged.
     assert _to_pydate("abc") == "abc"
 
 # ---------------------------------------------------------
@@ -174,9 +185,10 @@ def test_read_heart_data_parses_valid_row(tmp_path):
 
 
 def test_read_heart_data_drops_missing_time(tmp_path):
+    """Drop heart data rows with invalid timestamps."""
     df = pd.DataFrame({
         "date": ["03.11.25"],
-        "time": [""],  # ungültig
+        "time": [""],  # Invalid timestamp.
         "rr_syst": [120],
         "rr_diast": [80],
         "heart_rate": [70],
@@ -207,6 +219,7 @@ def test_read_heart_data_multiple_rows(tmp_path):
 
 
 def test_read_heart_data_invalid_date(tmp_path):
+    """Drop heart data rows with invalid dates."""
     df = pd.DataFrame({
         "date": ["not-a-date"],
         "time": ["08:00:00"],
@@ -225,7 +238,7 @@ def test_read_heart_data_invalid_date(tmp_path):
 def test_read_heart_data_dropna_executes(tmp_path):
     df = pd.DataFrame({
         "date": ["03.11.25", "04.11.25"],
-        "time": ["08:00:00", ""],  # zweite Zeile wird gedroppt
+        "time": ["08:00:00", ""],  # Second row will be dropped.
         "rr_syst": [120, 130],
         "rr_diast": [80, 85],
         "heart_rate": [70, 75],
@@ -242,7 +255,7 @@ def test_read_heart_data_int_conversion(tmp_path):
     df = pd.DataFrame({
         "date": ["03.11.25"],
         "time": ["08:00:00"],
-        "rr_syst": ["120"],  # als STRING
+        "rr_syst": ["120"],  # Stored as strings.
         "rr_diast": ["80"],
         "heart_rate": ["70"],
         "weight": ["80.0"],
@@ -278,6 +291,7 @@ def test_read_weight_data_parses_valid_row(tmp_path):
 
 
 def test_read_weight_data_invalid_weight(tmp_path):
+    """Drop weight rows with invalid numeric values."""
     df = pd.DataFrame({
         "date": ["03.11.25"],
         "weight": ["not-a-number"],
@@ -294,6 +308,7 @@ def test_read_weight_data_invalid_weight(tmp_path):
 
 
 def test_read_weight_data_invalid_date(tmp_path):
+    """Drop weight rows with invalid dates."""
     df = pd.DataFrame({
         "date": ["not-a-date"],
         "weight": [80.0],
@@ -348,26 +363,26 @@ def test_read_heart_data_full(tmp_path):
 
     df = pd.DataFrame({
         "date": ["01.01.2025", "02.01.2025"],
-        "time": ["08:00:00", ""],  # zweite Zeile wird gedroppt → deckt Zeile 42
+        "time": ["08:00:00", ""],  # Second row will be dropped.
         "rr_syst": ["120", "130"],
         "rr_diast": ["80", "85"],
         "heart_rate": ["70", "75"],
-        "weight": ["80", "80"],  # wird später gedroppt
+        "weight": ["80", "80"],  # Converted during processing.
     })
 
     df.to_excel(fn, sheet_name="data", index=False)
 
     out = read_heart_data(fn)
 
-    # Nur die erste Zeile bleibt übrig
+    # Only the first row remains after cleanup.
     assert len(out) == 1
 
-    # Typen wurden konvertiert → deckt Zeilen 55–56
+    # Numeric columns must be converted correctly.
     assert out["rr_syst"].dtype == "int64"
     assert out["rr_diast"].dtype == "int64"
     assert out["heart_rate"].dtype == "int64"
 
-    # date_time wurde erzeugt
+    # Combined datetime column must exist.
     assert "date_time" in out.columns
 
 
@@ -389,12 +404,11 @@ def test_read_weight_data_full(tmp_path):
 
     assert len(out) == 2
 
-    # deckt Zeile 69 (Timestamp‑Filter)
+    # Ensure timestamp filtering succeeds.
     assert isinstance(out["date"].iloc[0], pd.Timestamp)
 
-    # deckt Zeile 70 (to_numeric)
+    # Ensure numeric conversion succeeds.
     assert out["weight"].dtype == "float64"
 
-    # deckt Zeile 72 (week-Spalte)
+    # Ensure ISO week column exists.
     assert "week" in out.columns
-

@@ -1,16 +1,15 @@
+"""Unit tests for rr2graph.orchestrator."""
+
 from datetime import datetime
 
-import os
-import pytest
 import pandas as pd
-
-import matplotlib.pyplot as plt
+import pytest
 
 from rr2graph.orchestrator import generate_monthly_plots
 
 
 class DummyFig:
-    """Fake Matplotlib Figure, um savefig zu mocken."""
+    """Minimal matplotlib figure replacement for savefig testing."""
     def __init__(self):
         self.saved_files = []
 
@@ -22,9 +21,9 @@ class DummyFig:
 
 
 def test_generate_monthly_plots_creates_three_files(tmp_path, monkeypatch):
-    """Testet, ob PNG, PDF und SVG erzeugt werden."""
+    """Generate PNG, PDF, and SVG output files."""
 
-    # Fake-Figure zurückgeben
+    # Return a fake matplotlib figure.
     dummy_fig = DummyFig()
 
     def fake_get_fig_and_axs_array(num):
@@ -34,7 +33,7 @@ def test_generate_monthly_plots_creates_three_files(tmp_path, monkeypatch):
     def fake_gen_req_plot_type(plot_type, num, df_h, df_w, axs):
         return "(2025-01__2025-03 3 months) per month data and histogram"
 
-    # Monkeypatching
+    # Mock plotting helpers.
     monkeypatch.setattr(
         "rr2graph.orchestrator.get_needed_fig_and_axs_array",
         fake_get_fig_and_axs_array,
@@ -44,7 +43,7 @@ def test_generate_monthly_plots_creates_three_files(tmp_path, monkeypatch):
         fake_gen_req_plot_type,
     )
 
-    # Dummy-Daten
+    # Create temporary test datasets.
     df_heart = pd.DataFrame({
         "date_time": [
             datetime(2025, 1, 1),
@@ -75,25 +74,25 @@ def test_generate_monthly_plots_creates_three_files(tmp_path, monkeypatch):
         str(out_dir),
     )
 
-    # Es müssen 3 Dateien erzeugt werden
+    # Three output files must be generated.
     assert len(files) == 3
 
-    # Alle Endungen müssen vorkommen
+    # All expected file extensions must exist.
     assert any(f.endswith(".png") for f in files)
     assert any(f.endswith(".pdf") for f in files)
     assert any(f.endswith(".svg") for f in files)
 
-    # Dateien müssen im richtigen Ordner liegen
+    # Output directories must be created.
     assert (out_dir / "png").exists()
     assert (out_dir / "pdf").exists()
     assert (out_dir / "svg").exists()
 
-    # DummyFig muss savefig dreimal aufgerufen haben
+    # savefig() must be called for each output format.
     assert len(dummy_fig.saved_files) == 3
 
 
 def test_generate_monthly_plots_invalid_months():
-    """Ungültige Monatszahl → SystemExit."""
+    """Reject unsupported month counts."""
     df = pd.DataFrame({
         "date_time": [datetime(2025, 1, 1)],
         "rr_syst": [120],
@@ -113,7 +112,8 @@ def test_generate_monthly_plots_invalid_months():
 
 
 def test_generate_monthly_plots_closes_real_figure(tmp_path):
-    # Minimal gültige DataFrames
+    """Ensure real matplotlib figures are closed correctly."""
+    # Create minimal valid dataframes.
     df_heart = pd.DataFrame({
         "date_time": pd.to_datetime(["2024-01-01 10:00:00"]),
         "rr_syst": [120],
@@ -130,10 +130,10 @@ def test_generate_monthly_plots_closes_real_figure(tmp_path):
 
     out = tmp_path
 
-    # WICHTIG: kein Monkeypatch → echte Figure wird erzeugt
+    # Use the real matplotlib figure implementation.
     files = generate_monthly_plots("histogram", 1, df_heart, df_weight, out)
 
-    # Dateien wurden erzeugt
+    # Output files must be generated successfully.
     assert len(files) == 3
     for f in files:
         assert f.endswith((".png", ".pdf", ".svg"))

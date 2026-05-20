@@ -1,28 +1,31 @@
+"""Unit tests for rr2graph.layout."""
+
 import pytest
+
 from rr2graph.layout import get_needed_fig_and_axs_array
 
 
 def test_layout_one_month():
-    """1 Monat → 1 Zeile, 3 Spalten, A4 Landscape / 1/3 Höhe."""
+    """Validate the single-month A4 landscape layout."""
     fig, axs = get_needed_fig_and_axs_array(1)
 
-    assert len(axs) == 3                     # 1x3 → axs ist 1D-Liste mit 3 Elementen
+    assert len(axs) == 3  # Single-row layout returns a flat axes array.
     assert fig.get_figwidth() == pytest.approx(11.69)
     assert fig.get_figheight() == pytest.approx(8.27 / 3, rel=0.1)
 
 
 def test_layout_two_months():
-    """2 Monate → 2 Zeilen, 3 Spalten, A4 Landscape."""
+    """Validate the two-month A4 landscape layout."""
     fig, axs = get_needed_fig_and_axs_array(2)
 
-    assert len(axs) == 2                     # 2 Zeilen
-    assert len(axs[0]) == 3                  # 3 Spalten
+    assert len(axs) == 2  # Two layout rows.
+    assert len(axs[0]) == 3  # Three plot columns.
     assert fig.get_figwidth() == pytest.approx(11.69)
     assert fig.get_figheight() == pytest.approx(8.27 * 2 / 3, rel=0.1)
 
 
 def test_layout_three_months():
-    """3 Monate → 3 Zeilen, 3 Spalten, A4 Landscape."""
+    """Validate the three-month A4 landscape layout."""
     fig, axs = get_needed_fig_and_axs_array(3)
 
     assert len(axs) == 3
@@ -32,7 +35,7 @@ def test_layout_three_months():
 
 
 def test_layout_four_to_six_months():
-    """4–6 Monate → A3 Portrait."""
+    """Validate A3 portrait layouts for four to six months."""
     for n in [4, 5, 6]:
         fig, axs = get_needed_fig_and_axs_array(n)
 
@@ -43,7 +46,7 @@ def test_layout_four_to_six_months():
 
 
 def test_layout_invalid_months():
-    """Ungültige Monatszahl → SystemExit."""
+    """Reject unsupported month counts."""
     with pytest.raises(SystemExit):
         get_needed_fig_and_axs_array(0)
 

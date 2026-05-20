@@ -1,17 +1,17 @@
-# Tests für rr2graph
+# Tests for rr2graph
 
-Dieses Verzeichnis enthält die komplette pytest‑Suite für das Projekt **rr2graph**.  
-Die Tests decken alle Module ab:
+This directory contains the complete pytest suite for the **rr2graph** project.  
+The tests cover all major modules:
 
-- `io.py` – Einlesen und Parsen der Excel‑Daten  
-- `helpers.py` – Hilfsfunktionen (valid_month, ticks, bins, config)  
-- `layout.py` – Erzeugung der Figure‑Layouts  
-- `monthly.py` – Monatslogik und Orchestrierung der Plot‑Zeilen  
-- `orchestrator.py` – Speichern der Plots in PNG/PDF/SVG  
-- `plots/*` – Scatter, Histogramm, Violin, Box‑Swarm  
-- `cli.py` – Kommandozeilen‑Interface  
+- `io.py` – Reading and parsing Excel data  
+- `helpers.py` – Helper utilities (valid_month, ticks, bins, config)  
+- `layout.py` – Figure layout generation  
+- `monthly.py` – Monthly orchestration and plot row handling  
+- `orchestrator.py` – Saving plots as PNG/PDF/SVG  
+- `plots/*` – Scatter, histogram, violin, and box-swarm plots  
+- `cli.py` – Command-line interface  
 
-## Struktur
+## Structure
 
 ```code
 tests/
@@ -25,21 +25,21 @@ tests/
 └── test_plots.py
 ```
 
-## Tests ausführen
+## Running the tests
 
-Im Projekt‑Root:
+From the project root:
 
 ```python
 pytest
 ```
 
-Oder mit ausführlicher Ausgabe:
+Or with verbose output:
 
 ```python
 pytest -v
 ```
 
-oder mit ruff
+Or run Ruff linting:
 
 ```python
 pipenv run ruff check rr2graph
@@ -48,24 +48,24 @@ pipenv run ruff check tests/
 
 ## Coverage
 
-Falls `pytest.ini` Coverage aktiviert:
+If coverage is enabled in `pytest.ini`:
 
 ```python
 pytest –cov
 ````
 
-HTML‑Report:
+HTML report:
 
 ```python
 pytest –cov –cov-report=html
 open htmlcov/index.html
 ```
 
-## Hinweise
+## Notes
 
-- Die Plot‑Tests verwenden das Matplotlib‑Backend **Agg**, damit keine GUI geöffnet wird.
-- Die IO‑Tests erzeugen temporäre Excel‑Dateien im `tmp_path`‑Fixture.
-- Die CLI‑Tests mocken alle externen Funktionen, damit keine echten Plots oder Dateien erzeugt werden.
-- Die Tests sind so geschrieben, dass sie unabhängig von Betriebssystem, Pfaden und Zeitzonen laufen.
+- Plot tests use the Matplotlib **Agg** backend so no GUI windows are opened.
+- IO tests generate temporary Excel files using the `tmp_path` fixture.
+- CLI tests mock external functions to avoid generating real plots or files.
+- The test suite is designed to run independently of operating systems, filesystem paths, and time zones.
 
-Viel Spaß beim Testen!
+Happy testing!

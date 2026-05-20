@@ -15,12 +15,12 @@
 ![Docker Pulls](https://img.shields.io/badge/GHCR%20Pulls-Automatic-blue?logo=docker)
 ![Docker Image](https://img.shields.io/badge/Multi--Arch-AMD64%20%7C%20ARM64-green?logo=docker)
 
-`rr2graph` is a lightweight command‑line tool for processing and visualizing blood pressure, pulse, and weight data stored in Excel files.  
-It generates monthly plots (box‑swarm, scatter, histogram, violin) and exports them automatically as PNG, PDF, and SVG.
+`rr2graph` is a lightweight command-line tool for processing and visualizing blood pressure, pulse, and weight data stored in Excel files.  
+It generates monthly plots (box-swarm, scatter, histogram, violin) and exports them automatically as PNG, PDF, and SVG.
 
 ## 📤 Example Output
 
-Example visualization using scatter and box‑swarm plots:
+Example visualization using scatter and box-swarm plots:
 
 ![Example Box Swarm Plot](https://github.com/hlotze/rr2graph/blob/main/examples/example_box_swarm.png?raw=true)
 
@@ -42,34 +42,33 @@ Generated histogram plots stored at:
 …
 ```
 
-## 🐳 Docker Quickstart (End‑User)
+## 🐳 Docker Quickstart (End User)
 
-🇩🇪 Wenn Sie rr2graph ohne lokale Python‑Installation nutzen möchten,
-finden Sie eine vollständige Anleitung in:
+If you want to use rr2graph without installing Python locally, see the full guide here:
 
-👉 [Docker - Quickstart für End‑User](./README_DOCKER.md)
+👉 [Docker Quickstart](./README_DOCKER.md)
 
-## 🐍 Python Quickstart (Virtual Environment, End‑User)
+## 🐍 Python Quickstart (Virtual Environment, End User)
 
-🇩🇪 Wenn Sie rr2graph lokal mit Python in einer isolierten Umgebung nutzen möchten, finden Sie eine vollständige Schritt‑für‑Schritt‑Anleitung in:
+If you want to run rr2graph locally in an isolated Python environment, see the step-by-step guide here:
 
-👉 [.venv - Quickstart (Virtual Environment, End‑User)](./README_VENV.md)
+👉 [Virtual Environment Quickstart](./README_VENV.md)
 
-## ⚡ Python Quickstart mit uv (End‑User)
+## ⚡ Python Quickstart with uv (End User)
 
-Für Nutzer, die rr2graph mit dem modernen Python‑Tool uv verwenden möchten:
+If you prefer using the modern Python tool uv:
 
-👉 [Quickstart mit uv (End‑User)](./README_UV.md)
+👉 [uv Quickstart](./README_UV.md)
 
 ## 🚀 Installation
 
-As I'm working with `pipenv`, the rest of the documentation is for `pipenv` users:
+This project supports Pipenv-based installation.
 
 1. Ensure you are in the project root
 
     > ~/your/project/directory/
 
-2. Install using Pipenv (editable mode)
+2. Install in editable mode using Pipenv
 
     ```bash
     pipenv install -e .
@@ -87,9 +86,9 @@ As I'm working with `pipenv`, the rest of the documentation is for `pipenv` user
 
 ## 🧰 CLI Usage
 
-After installation, the command rr2graph becomes available.
+After installation, the command `rr2graph` becomes available.
 
-Show help
+Show help:
 
 ```bash
 rr2graph --help
@@ -153,14 +152,14 @@ Everything looks good ✓
 
 Example config.yaml:
 
-```python
+```yaml
 excel: "rr_data.xlsx"
 num_of_months: 3
 output: "plots/"
 ```
 
 | Field | Description |
-| ----- | ----- |
+| ----- | ----------- |
 | excel | Path to the Excel file containing RR data |
 | num_of_months | Number of months to analyze |
 | output | Output directory for PNG/PDF/SVG plots |
@@ -197,29 +196,29 @@ plots/
 ├── examples/example_box_swarm.png
 ├── Pipfile
 ├── plots/
-│   ├── pdf/
-│   ├── png/
-│   ├── svg/
-│   └── test/
+│   ├── pdf/
+│   ├── png/
+│   ├── svg/
+│   └── test/
 ├── pyproject.toml
 ├── README.md
 ├── requirements.txt
 ├── requirements_dev.txt
 ├── rr_data.xlsx
 ├── rr2graph/
-│   ├── cli.py
-│   ├── helpers.py
-│   ├── io.py
-│   ├── layout.py
-│   ├── monthly.py
-│   ├── orchestrator.py
-│   ├── tools/
-│   │   └── bump_version.py
-│   └── plots/
-│       ├── box_swarm.py
-│       ├── hist.py
-│       ├── scatter.py
-│       └── violin.py
+│   ├── cli.py
+│   ├── helpers.py
+│   ├── io.py
+│   ├── layout.py
+│   ├── monthly.py
+│   ├── orchestrator.py
+│   ├── tools/
+│   │   └── bump_version.py
+│   └── plots/
+│       ├── box_swarm.py
+│       ├── hist.py
+│       ├── scatter.py
+│       └── violin.py
 ├── test_config.yaml
 ├── test_rr_data.xlsx
 └── tests/
@@ -270,7 +269,7 @@ make version-major
 
 TestPyPI upload:
 
-```bash
+```text
 make publish-test
 ```
 

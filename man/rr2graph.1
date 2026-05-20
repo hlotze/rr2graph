@@ -1,92 +1,109 @@
 .TH RR2GRAPH 1 "May 2026" "rr2graph 1.0" "User Commands"
 .SH NAME
-rr2graph \- process and visualize blood pressure, pulse and weight data
+rr2graph \- visualize blood pressure, pulse and weight data from Excel files
 
 .SH SYNOPSIS
 .B rr2graph
-[\-c config.yaml]
-[\-\-info]
-[\-\-version]
+[\-e EXCEL]
+[\-n NUM_OF_MONTHS]
+[\-o OUTPUT]
+[\-c CONFIG]
+[\-g]
+[\-i]
+[\-v]
 
 .SH DESCRIPTION
 .B rr2graph
-is a lightweight command-line tool for processing and visualizing
-blood pressure, pulse and weight measurements from Excel files.
-It generates monthly charts (box-swarm, scatter, histogram, violin)
-and exports them as PNG, PDF and SVG.
+is a command-line tool that reads blood pressure, pulse and weight data from Excel files
+and generates monthly visualizations.
 
-The tool reads a YAML configuration file that specifies input data,
-output directories and plot settings.
+It creates plots such as box-swarm, scatter, histogram and violin charts
+and exports them as PNG, PDF and SVG files.
+
+The tool can be used directly with command-line arguments or via a YAML configuration file.
 
 .SH OPTIONS
 .TP
-.BR \-c ", " \-\-config " " \fIFILE\fR
-Path to the YAML configuration file. Defaults to \fIconfig.yaml\fR
-in the current directory.
+.BR \-e , \--excel " " \fIFILE\fR
+Path to the Excel file containing measurement data.
+Default: rr_data.xlsx
 
 .TP
-.BR \-\-info
-Show environment, configuration and installation details.
+.BR \-n , \--num_of_months " " \fIN\fR
+Number of months to visualize (typically 1–6).
+Default: 3
 
 .TP
-.BR \-\-version
+.BR \-o , \--output " " \fIDIR\fR
+Output directory for generated plots.
+Default: plots/
+
+.TP
+.BR \-c , \--config " " \fIFILE\fR
+Path to optional YAML configuration file.
+When provided, CLI arguments may be overridden by the config.
+Default: config.yaml
+
+.TP
+.BR \-g , \--generate-test-data
+Generate a sample Excel file (test_rr_data.xlsx) and exit.
+
+.TP
+.BR \-i , \--info
+Show system information, configuration and environment details.
+
+.TP
+.BR \-v , \--version
 Show program version and exit.
 
 .SH CONFIGURATION
-The configuration file is written in YAML and contains:
-
-.TP
-.B input_file
-Path to the Excel file containing measurement data.
-
-.TP
-.B output_dir
-Directory where generated plots will be saved.
-
-.TP
-.B plots
-List of plot types to generate (e.g. box, swarm, scatter, histogram, violin).
+rr2graph supports an optional YAML configuration file.
 
 Example:
 
 .nf
-input_file: ~/OneDrive/rr_data.xlsx
-output_dir: ~/OneDrive/rr_plots
-plots:
-  - box
-  - swarm
-  - scatter
+excel: "rr_data.xlsx"
+num_of_months: 3
+output: "plots/"
 .fi
 
+If a configuration file is provided via \-c, its values may override CLI arguments.
+
 .SH EXAMPLES
-Generate plots using the default configuration:
+Run with default settings:
 
 .nf
 rr2graph
 .fi
 
-Use a custom configuration file:
+Use a custom Excel file:
 
 .nf
-rr2graph -c config.yaml
+rr2graph -e rr_data.xlsx -n 3 -o plots/
 .fi
 
-or with configs more centralized at your HOME
+Generate test data:
 
 .nf
-rr2graph -c ~/configs/rr2graph.yaml
+rr2graph -g
 .fi
 
-Show diagnostic information:
+Show system information:
 
 .nf
 rr2graph --info
 .fi
 
+Use a configuration file:
+
+.nf
+rr2graph -c config.yaml
+.fi
+
 .SH FILES
 .TP
 .I config.yaml
-Default configuration file.
+Optional configuration file used to define input, output and processing settings.
 
 .SH EXIT STATUS
 .TP
@@ -94,13 +111,13 @@ Default configuration file.
 Success.
 .TP
 1
-General error (invalid config, missing input file, etc.).
+General error (invalid input, missing file, or configuration error).
 
 .SH SEE ALSO
-python(1), yaml(5)
+python(1)
 
 .SH AUTHOR
 Hagen <hlotze@yahoo.com>
 
 .SH LICENSE
-MIT License.
+MIT License

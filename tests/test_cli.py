@@ -1,7 +1,11 @@
-# import pytest
+"""Unit tests for rr2graph.cli."""
+
 import sys
-# from pathlib import Path
-from rr2graph.cli import parse_args, main
+from datetime import datetime
+
+import pandas as pd
+
+from rr2graph.cli import main, parse_args
 
 
 # ---------------------------------------------------------
@@ -9,6 +13,7 @@ from rr2graph.cli import parse_args, main
 # ---------------------------------------------------------
 
 def test_parse_args_basic():
+    """Validate standard CLI argument parsing."""
     sys.argv = ["rr2graph", "-e", "data.xlsx", "-n", "3", "-o", "plots"]
     args = parse_args()
 
@@ -18,6 +23,7 @@ def test_parse_args_basic():
 
 
 def test_parse_args_info_flag():
+    """Validate the --info CLI flag."""
     sys.argv = ["rr2graph", "--info"]
     args = parse_args()
 
@@ -25,6 +31,7 @@ def test_parse_args_info_flag():
 
 
 def test_parse_args_generate_test_data_flag():
+    """Validate the --generate-test-data CLI flag."""
     sys.argv = ["rr2graph", "--generate-test-data"]
     args = parse_args()
 
@@ -36,7 +43,7 @@ def test_parse_args_generate_test_data_flag():
 # ---------------------------------------------------------
 
 def test_main_calls_print_info(monkeypatch, capsys):
-    """--info soll print_info() aufrufen und sofort beenden."""
+    """Ensure --info triggers print_info() and exits early."""
     sys.argv = ["rr2graph", "--info"]
 
     called = {"info": False}
@@ -52,7 +59,7 @@ def test_main_calls_print_info(monkeypatch, capsys):
 
 
 def test_main_calls_generate_test_data(monkeypatch, capsys):
-    """--generate-test-data soll generate_test_data_xlsx() aufrufen."""
+    """Ensure --generate-test-data triggers test data generation."""
     sys.argv = ["rr2graph", "--generate-test-data"]
 
     called = {"gen": False}
@@ -68,7 +75,7 @@ def test_main_calls_generate_test_data(monkeypatch, capsys):
 
 
 def test_main_runs_full_pipeline(monkeypatch, tmp_path, capsys):
-    """Testet den normalen CLI-Durchlauf ohne echte Plots/Excel."""
+    """Validate the normal CLI workflow using mocked dependencies."""
     sys.argv = [
         "rr2graph",
         "-e", "dummy.xlsx",
@@ -76,10 +83,7 @@ def test_main_runs_full_pipeline(monkeypatch, tmp_path, capsys):
         "-o", str(tmp_path / "plots")
     ]
 
-    # Fake DataFrames
-    import pandas as pd
-    from datetime import datetime
-
+    # Create temporary test dataframes.
     df_heart = pd.DataFrame({
         "date_time": [datetime(2025, 1, 1)],
         "rr_syst": [120],
@@ -92,11 +96,11 @@ def test_main_runs_full_pipeline(monkeypatch, tmp_path, capsys):
         "weight": [80.0],
     })
 
-    # Monkeypatching der IO-Funktionen
+    # Mock Excel reader functions.
     monkeypatch.setattr("rr2graph.cli.read_heart_data", lambda fn: df_heart)
     monkeypatch.setattr("rr2graph.cli.read_weight_data", lambda fn: df_weight)
 
-    # Monkeypatching der Plot-Funktion
+    # Mock plot generation.
     def fake_generate_monthly_plots(plot_type, num, df_h, df_w, out):
         return [f"{plot_type}_dummy.png"]
 
@@ -109,7 +113,7 @@ def test_main_runs_full_pipeline(monkeypatch, tmp_path, capsys):
 
     captured = capsys.readouterr()
 
-    # CLI-Ausgabe prüfen
+    # Validate CLI console output.
     assert "Heart rows read: 1" in captured.out
     assert "Weight rows read: 1" in captured.out
     assert "Generating histogram plots…" in captured.out

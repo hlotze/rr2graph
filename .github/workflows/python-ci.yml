@@ -10,28 +10,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
     env:
       PIPENV_PIPFILE: ${{ github.workspace }}/Pipfile
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          path: .
 
-      - name: Set up Python
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
-          python-version: "3.14"
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
 
       - name: Install pipenv
         run: pip install pipenv
 
       - name: Install dependencies
         run: |
-          pipenv --rm || true
-          pipenv install --dev --python $(which python)
+          pipenv install --dev --deploy --ignore-pipfile
 
       - name: Install rr2graph (editable)
         run: pipenv run pip install -e .
@@ -48,5 +49,5 @@ jobs:
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-html
+          name: coverage-html-${{ matrix.python-version }}
           path: htmlcov

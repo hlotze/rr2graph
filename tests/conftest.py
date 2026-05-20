@@ -1,22 +1,39 @@
-from datetime import datetime  # , time
+"""Shared pytest fixtures and test utilities for rr2graph."""
+
+from datetime import datetime
 
 import pandas as pd
+import pytest
 import xlsxwriter
 
-import pytest
+from pathlib import Path
 
 
-def write_excel(tmp_path, df):
+def write_excel(tmp_path: Path, df: pd.DataFrame) -> Path:
+    """
+    Write a temporary Excel workbook for integration tests.
+
+    Args:
+        tmp_path:
+            Temporary pytest directory.
+
+        df:
+            Dataframe written into the workbook.
+
+    Returns:
+        Path:
+            Path to the generated Excel workbook.
+    """
     fn = tmp_path / "test.xlsx"
 
     workbook = xlsxwriter.Workbook(fn)
     worksheet = workbook.add_worksheet("data")
 
-    # Header schreiben
+    # Write column headers.
     for col, name in enumerate(df.columns):
         worksheet.write(0, col, name)
 
-    # Daten schreiben (als rohe Werte)
+    # Write dataframe values as raw worksheet data.
     for row in range(len(df)):
         for col, name in enumerate(df.columns):
             worksheet.write(row + 1, col, df.iloc[row, col])
@@ -27,7 +44,7 @@ def write_excel(tmp_path, df):
 
 @pytest.fixture
 def df_heart_sample():
-    """kleiner DataFrame für Monats-Tests"""
+    """Provide a small RR dataframe for monthly plot tests."""
     data = {
         "date_time": [
             datetime(2024, 12, 31, 8, 0),
@@ -41,8 +58,10 @@ def df_heart_sample():
     }
     return pd.DataFrame(data)
 
+
 @pytest.fixture
 def df_weight_sample():
+    """Provide a small weight dataframe for monthly plot tests."""
     data = {
         "date": [
             datetime(2024, 12, 31),

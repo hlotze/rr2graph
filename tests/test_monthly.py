@@ -1,19 +1,19 @@
-""""Tests für die rr2graph.monthly Funktionen."""
+"""Unit tests for rr2graph.monthly."""
 
+import matplotlib.pyplot as plt
 import pandas as pd
 import pytest
-import matplotlib.pyplot as plt
 
-from rr2graph.monthly import (
-    gen_req_plot_type,
-    _ensure_output_dirs,
-    _build_output_paths
-)
 import rr2graph.monthly as monthly
+from rr2graph.monthly import (
+    _build_output_paths,
+    _ensure_output_dirs,
+    gen_req_plot_type,
+)
 
 
 def test_ensure_output_dirs(tmp_path):
-    """Testet, ob die Ausgabeordner korrekt erstellt werden."""
+    """Create the required monthly output directories."""
 
     dirs = _ensure_output_dirs(tmp_path)
 
@@ -27,7 +27,7 @@ def test_ensure_output_dirs(tmp_path):
 
 
 def test_build_output_paths(tmp_path):
-    """Testet, ob die Dateipfade korrekt aufgebaut werden."""
+    """Build output file paths for all export formats."""
     subdirs = {
         "png": tmp_path / "png",
         "pdf": tmp_path / "pdf",
@@ -41,11 +41,8 @@ def test_build_output_paths(tmp_path):
     assert paths["svg"].name == "testfile.svg"
 
 
-def test_row_func_violin(monkeypatch,
-                         df_heart_sample,
-                         df_weight_sample):
-    """Testet, ob die richtige row_func
-    für den Violin-Plot aufgerufen wird."""
+def test_row_func_violin(monkeypatch, df_heart_sample, df_weight_sample):
+    """Call the violin row renderer for each requested month."""
     calls = []
 
     def fake(month, axs, df_h, df_w):
@@ -63,8 +60,7 @@ def test_row_func_violin(monkeypatch,
 
 
 def test_row_func_box_swarm(monkeypatch, df_heart_sample, df_weight_sample):
-    """Testet, ob die richtige row_func
-    für den Box-Swarm-Plot aufgerufen wird."""
+    """Call the box-swarm row renderer for each requested month."""
     calls = []
 
     def fake(month, axs, df_h, df_w):
@@ -79,9 +75,10 @@ def test_row_func_box_swarm(monkeypatch, df_heart_sample, df_weight_sample):
     gen_req_plot_type("box_swarm", 2, df_heart_sample, df_weight_sample, axs)
 
     assert calls == ["2025-02", "2025-03"]
-    
-    
+
+
 def test_row_func_violin_called(monkeypatch, df_heart_sample, df_weight_sample):
+    """Ensure violin row functions are executed for each month."""
     calls = []
 
     def fake(month, axs, df_h, df_w):
@@ -106,6 +103,7 @@ def test_row_func_violin_called(monkeypatch, df_heart_sample, df_weight_sample):
 
 
 def test_row_func_box_swarm_called(monkeypatch, df_heart_sample, df_weight_sample):
+    """Ensure box-swarm row functions are executed for each month."""
     calls = []
 
     def fake(month, axs, df_h, df_w):
@@ -130,8 +128,9 @@ def test_row_func_box_swarm_called(monkeypatch, df_heart_sample, df_weight_sampl
 
 
 def test_generate_monthly_plots(monkeypatch, tmp_path, df_heart_sample, df_weight_sample):
+    """Generate all requested monthly output formats."""
 
-    # Fake figure + axes
+    # Create fake matplotlib objects.
     class FakeFig:
         def __init__(self):
             self.saved = []
@@ -145,21 +144,21 @@ def test_generate_monthly_plots(monkeypatch, tmp_path, df_heart_sample, df_weigh
     fake_fig = FakeFig()
     fake_axs = [[None, None, None]]
 
-    # Patch: Figure + Axes
+    # Mock figure and axes allocation.
     monkeypatch.setattr(
         monthly,
         "get_needed_fig_and_axs_array",
         lambda n: (fake_fig, fake_axs),
     )
 
-    # Patch: Filename
+    # Mock generated filename.
     monkeypatch.setattr(
         monthly,
         "gen_req_plot_type",
         lambda *args, **kwargs: "testfile",
     )
 
-    # Patch: plt.close → akzeptiert FakeFig
+    # Allow plt.close() to accept the fake figure.
     monkeypatch.setattr("matplotlib.pyplot.close", lambda fig: None)
 
     paths = monthly.generate_monthly_plots(
@@ -173,6 +172,7 @@ def test_generate_monthly_plots(monkeypatch, tmp_path, df_heart_sample, df_weigh
 
 
 def test_gen_req_plot_type_invalid():
+    """Reject unsupported plot types."""
     df_heart = pd.DataFrame({"date_time": [], "rr_syst": [], "rr_diast": [], "heart_rate": []})
     df_weight = pd.DataFrame({"date": [], "weight": []})
 
@@ -182,13 +182,12 @@ def test_gen_req_plot_type_invalid():
         gen_req_plot_type("invalid_plot_type", 1, df_heart, df_weight, axs)
 
 
-
 def test_month_extraction_last_n_months(df_heart_sample, df_weight_sample):
-    """Testet, ob die letzten num_of_months korrekt extrahiert werden."""
-    # 4 Monate im Sample: 2024-12, 2025-01, 2025-02, 2025-03
+    """Extract only the requested trailing months."""
+    # Sample dataset spans four calendar months.
     num_months = 3
 
-    # Dummy-AXS-Array (3 Zeilen, 3 Spalten)
+    # Create a placeholder axes layout.
     axs = [[None, None, None] for _ in range(num_months)]
 
     _ = gen_req_plot_type(
@@ -199,7 +198,7 @@ def test_month_extraction_last_n_months(df_heart_sample, df_weight_sample):
         axs,
     )
 
-    # Erwartete Monate: 2025-01, 2025-02, 2025-03
+    # Only the trailing months should remain.
     expected = ["2025-01", "2025-02", "2025-03"]
     months = (
         df_heart_sample["date_time"]
@@ -211,12 +210,8 @@ def test_month_extraction_last_n_months(df_heart_sample, df_weight_sample):
     assert [str(m) for m in months] == expected
 
 
-def test_row_func_called_correctly(
-    monkeypatch,
-    df_heart_sample,
-    df_weight_sample
-):
-    """Testet, ob row_func für jeden Monat genau einmal aufgerufen wird."""
+def test_row_func_called_correctly(monkeypatch, df_heart_sample, df_weight_sample):
+    """Execute the histogram row renderer once per month."""
     calls = []
 
     def fake_row_func(month, axs, df_h, df_w):
@@ -238,12 +233,12 @@ def test_row_func_called_correctly(
         axs,
     )
 
-    # Erwartete Monate: 2025-02, 2025-03
+    # Only the latest months should be processed.
     assert calls == ["2025-02", "2025-03"]
 
 
 def test_fn_base_format_multi_month(df_heart_sample, df_weight_sample):
-    """Testet, ob der Dateiname korrekt formatiert wird."""
+    """Build descriptive filenames for multi-month plots."""
     num_months = 3
     axs = [[None, None, None] for _ in range(num_months)]
 
@@ -255,7 +250,7 @@ def test_fn_base_format_multi_month(df_heart_sample, df_weight_sample):
         axs,
     )
 
-    # Beispiel: (2025-01__2025-03 3 months) per month data and violin
+    # Example filename pattern.
     assert "2025-01" in fn
     assert "2025-03" in fn
     assert "3 months" in fn
@@ -263,7 +258,7 @@ def test_fn_base_format_multi_month(df_heart_sample, df_weight_sample):
 
 
 def test_fn_base_format_single_month(df_heart_sample, df_weight_sample):
-    """Testet den 1-Monats-Fall."""
+    """Build descriptive filenames for single-month plots."""
     num_months = 1
     axs = [None, None, None]
 
@@ -275,16 +270,13 @@ def test_fn_base_format_single_month(df_heart_sample, df_weight_sample):
         axs,
     )
 
-    # Letzter Monat im Sample ist 2025-03
+    # The latest sample month is 2025-03.
     assert "(2025-03)" in fn
     assert "box_swarm" in fn
 
 
-def test_month_filtering_respects_year_boundaries(
-    df_heart_sample,
-    df_weight_sample
-):
-    """Testet, ob Jahresgrenzen korrekt funktionieren."""
+def test_month_filtering_respects_year_boundaries(df_heart_sample, df_weight_sample):
+    """Handle month filtering across year boundaries."""
     num_months = 2
     axs = [[None, None, None] for _ in range(num_months)]
 
@@ -296,7 +288,7 @@ def test_month_filtering_respects_year_boundaries(
         axs,
     )
 
-    # Erwartete Monate: 2025-02, 2025-03
+    # Only the latest months should be processed.
     assert "2025-02" in fn
     assert "2025-03" in fn
     assert "2024-12" not in fn

@@ -1,76 +1,65 @@
 # ============================================
-# Python / Pipenv / Build
+# Python
 # ============================================
 
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
 
-# Pipenv
-Pipfile.lock
-
-# venv
+# Virtual environments
 venv/
+.venv/
 
-# Build artifacts
+# ============================================
+# Packaging / Build
+# ============================================
+
 build/
 dist/
 *.egg-info/
 
-# Coverage
-coverage.xml
-.coverage
-htmlcov/
-coverage/
 
-# pytest cache
+# ============================================
+# Testing / CI
+# ============================================
+
 .pytest_cache/
-
-# ruff cache
 .ruff_cache/
-
-# Jupyter
-*.ipynb_checkpoints/
+.coverage
+coverage.xml
+htmlcov/
 
 # ============================================
-# Project-specific exclusions
+# Project artifacts (runtime generated data)
 # ============================================
 
-# Backups and old versions
-__bak/
-
-# Generated plots at toplevel dir
-/plots/
-
-# not directly project related
-rr_corr.ipynb
-my_tests.ipynb
-test_rr2graph.ipynb
-README.pdf
-my_TODOs.md
-DockerFile_*
-
-# Test data
+plots/
 rr_data.xlsx
 test_rr_data.xlsx
-test_config.yaml
-config_docker.yaml
+*config*.yaml
 
-# Local configs
-config.yaml
-config_od.yaml
+# Jupyter / experiments
+*.ipynb
+.ipynb_checkpoints/
 
-# Manpage build artifacts (if any)
+# Logs
+*.log
+
+# Backups / temp
+__bak/
+
+# Manpage artifacts
 man/*.gz
 
+# Misc project files
+DockerFile_*
+my_TODOs.md
+
 # ============================================
-# OS / Editor
+# OS / IDE
 # ============================================
 
-# macOS
 .DS_Store
 **/.DS_Store
-
-# VS Code
 .vscode/

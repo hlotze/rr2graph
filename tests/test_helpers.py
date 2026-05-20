@@ -1,16 +1,19 @@
-import os
+"""Unit tests for rr2graph.helpers."""
+
 import argparse
+import os
+
 import numpy as np
 import pandas as pd
 import pytest
 
 from rr2graph.helpers import (
-    valid_month,
-    load_config,
-    ensure_output_dirs,
     binwidth_2_bins,
     calculate_weekly_ticks,
-    print_info
+    ensure_output_dirs,
+    load_config,
+    print_info,
+    valid_month,
 )
 
 
@@ -47,14 +50,16 @@ def test_load_config_none():
 
 
 def test_load_config_missing(tmp_path, capsys):
+    """Return an empty config when the file is missing."""
     path = tmp_path / "missing.yaml"
     out = load_config(str(path))
     captured = capsys.readouterr()
     assert out == {}
-    assert "nicht gefunden" in captured.out
+    assert "not found" in captured.out
 
 
 def test_load_config_valid(tmp_path):
+    """Load a valid YAML configuration file."""
     cfgfile = tmp_path / "cfg.yaml"
     cfgfile.write_text("excel: test.xlsx\nnum_of_months: 3\n")
     out = load_config(str(cfgfile))
@@ -67,6 +72,7 @@ def test_load_config_valid(tmp_path):
 # ---------------------------------------------------------
 
 def test_ensure_output_dirs(tmp_path):
+    """Create all required rr2graph output directories."""
     base = tmp_path / "out"
     ensure_output_dirs(str(base))
 
@@ -86,6 +92,7 @@ def test_binwidth_2_bins_ok():
 
 
 def test_binwidth_2_bins_invalid():
+    """Reject invalid histogram bin widths."""
     with pytest.raises(ValueError):
         binwidth_2_bins(np.array([1, 2, 3]), 0)
 
@@ -95,16 +102,17 @@ def test_binwidth_2_bins_invalid():
 # ---------------------------------------------------------
 
 def test_calculate_weekly_ticks_weekly():
+    """Generate weekly Monday-based date ticks."""
     dates = pd.to_datetime(["2025-01-10", "2025-01-20"])
     ticks = calculate_weekly_ticks(dates)
 
-    # erster Tick = Montag
+    # First tick must be Monday.
     assert ticks[0].weekday() == 0
 
-    # letzter Tick = Montag
+    # Last tick must be Monday.
     assert ticks[-1].weekday() == 0
 
-    # wöchentliche Frequenz
+    # Ensure weekly spacing.
     diffs = np.diff(ticks)
     assert all(d == np.timedelta64(7, "D") for d in diffs)
 
@@ -114,23 +122,26 @@ def test_calculate_weekly_ticks_weekly():
 # ---------------------------------------------------------
 
 def test_print_info_runs(capsys):
+    """Ensure print_info() generates CLI output."""
     print_info()
     captured = capsys.readouterr()
     assert "rr2graph info" in captured.out
 
 
 def test_print_info_no_config(monkeypatch, capsys, tmp_path):
-    # Arbeitsverzeichnis auf tmp_path setzen (ohne config.yaml)
+    """Handle missing config.yaml files gracefully."""
+    # Switch working directory without a config.yaml file.
     monkeypatch.chdir(tmp_path)
 
     print_info()
     out = capsys.readouterr().out
 
-    assert "Keine Config-Datei gefunden" in out
+    assert "No config file found" in out
 
 
 def test_print_info_with_config(monkeypatch, capsys, tmp_path):
-    # config.yaml erzeugen
+    """Display parsed configuration information."""
+    # Create a temporary config.yaml file.
     cfg = tmp_path / "config.yaml"
     cfg.write_text("excel: test.xlsx\nnum_of_months: 3\noutput: out/")
 
@@ -139,23 +150,24 @@ def test_print_info_with_config(monkeypatch, capsys, tmp_path):
     print_info()
     out = capsys.readouterr().out
 
-    assert "Gefundene Config-Datei" in out
-    assert "Excel-Datei" in out
-    assert "Monate" in out
-    assert "Output-Ordner" in out
+    assert "Detected config file" in out
+    assert "Excel file" in out
+    assert "Months" in out
+    assert "Output directory" in out
 
 
 def test_print_info_config_exception(monkeypatch, capsys, tmp_path):
+    """Handle invalid configuration files gracefully."""
     from rr2graph.helpers import print_info
 
-    # Arbeitsverzeichnis wechseln
+    # Switch into the temporary working directory.
     monkeypatch.chdir(tmp_path)
 
-    # config.yaml erzeugen, aber mit ungültigem (binärem) Inhalt
+    # Create an invalid binary config.yaml file.
     cfg = tmp_path / "config.yaml"
     cfg.write_bytes(b"\x00\xFF\x00\xFFINVALID YAML\x00")
 
     print_info()
     out = capsys.readouterr().out
 
-    assert "Warnung: Config konnte nicht gelesen werden" in out
+    assert "Warning: Failed to read config" in out

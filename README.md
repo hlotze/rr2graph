@@ -192,37 +192,63 @@ plots/
 ```text
 /your/project/directory/
 .
-├── config.yaml
-├── examples/example_box_swarm.png
+├── CHANGELOG.md
+├── coverage.ini
+├── Dockerfile
+├── examples
+│   └── example_box_swarm.png
+├── LICENSE
+├── Makefile
+├── man
+│   ├── install-man.sh
+│   ├── rr2graph.1
+│   └── uninstall-man.sh
+├── MANIFEST.in
 ├── Pipfile
-├── plots/
-│   ├── pdf/
-│   ├── png/
-│   ├── svg/
-│   └── test/
+├── Pipfile.lock
+├── plots
 ├── pyproject.toml
+├── pytest.ini
+├── README_DOCKER.md
+├── README_UV.md
+├── README_VENV.md
 ├── README.md
-├── requirements.txt
 ├── requirements_dev.txt
+├── requirements.txt
+├── rr_corr.ipynb
 ├── rr_data.xlsx
-├── rr2graph/
-│   ├── cli.py
-│   ├── helpers.py
-│   ├── io.py
-│   ├── layout.py
-│   ├── monthly.py
-│   ├── orchestrator.py
-│   ├── tools/
-│   │   └── bump_version.py
-│   └── plots/
-│       ├── box_swarm.py
-│       ├── hist.py
-│       ├── scatter.py
-│       └── violin.py
+├── rr2graph
+│   ├── __init__.py
+│   ├── cli.py
+│   ├── helpers.py
+│   ├── io.py
+│   ├── layout.py
+│   ├── monthly.py
+│   ├── orchestrator.py
+│   ├── plots
+│   │   ├── __init__.py
+│   │   ├── box_swarm.py
+│   │   ├── hist.py
+│   │   ├── scatter.py
+│   │   └── violin.py
+│   └── tools
+│       ├── __init__.py
+│       └── bump_version.py
 ├── test_config.yaml
 ├── test_rr_data.xlsx
-└── tests/
-    └── test_rr2graph.py
+├── test_rr2graph.ipynb
+└── tests
+    ├── conftest.py
+    ├── README.md
+    ├── test_cli.py
+    ├── test_helpers.py
+    ├── test_io.py
+    ├── test_layout.py
+    ├── test_monthly.py
+    ├── test_orchestrator.py
+    ├── test_plots.py
+    └── tools
+        └── test_bump_version.py
 ```
 
 ## 🧪 Run Tests

@@ -215,8 +215,6 @@ plots/
 ├── README.md
 ├── requirements_dev.txt
 ├── requirements.txt
-├── rr_corr.ipynb
-├── rr_data.xlsx
 ├── rr2graph
 │   ├── __init__.py
 │   ├── cli.py
@@ -234,9 +232,6 @@ plots/
 │   └── tools
 │       ├── __init__.py
 │       └── bump_version.py
-├── test_config.yaml
-├── test_rr_data.xlsx
-├── test_rr2graph.ipynb
 └── tests
     ├── conftest.py
     ├── README.md

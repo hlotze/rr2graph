@@ -52,18 +52,26 @@ htmlcov/
 # Project runtime outputs
 # ============================================
 
-plots/
+# Generated plot output
+# e.g.
+# /plots/pdf/
+# /plots/png/
+# /plots/svg/
+/plots/
 *rr_data.xlsx
 *config*.yaml
 
+# developer docs
+/docs/
 
 # generated docs / artifacts
 man/*.gz
 README.pdf
+__NOTES.md
 
 # backups / temp
 __bak/
-my_TODOs.md
+
 
 # ============================================
 # Logs

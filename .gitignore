@@ -45,8 +45,7 @@ htmlcov/
 /docs/
 
 # others
-rr_data.xlsx
-test_rr_data.xlsx
+*rr_data.xlsx
 *config*.yaml
 
 # Jupyter / experiments

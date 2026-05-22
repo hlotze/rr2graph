@@ -59,6 +59,22 @@ def df_weight_small():
     )
 
 
+@pytest.fixture
+def df_heart_multi_month():
+    """Heart-rate test data spanning multiple months."""
+    return pd.DataFrame(
+        {
+            "date_time": [
+                datetime(2025, 1, 31, 23, 0),
+                datetime(2025, 2, 1, 8, 0),
+            ],
+            "rr_syst": [120, 125],
+            "rr_diast": [80, 82],
+            "heart_rate": [70, 72],
+        }
+    )
+
+
 # ---------------------------------------------------------
 # Scatter Plot
 # ---------------------------------------------------------
@@ -74,6 +90,17 @@ def test_scatter_plot_runs(df_heart_small, df_weight_small):
     assert len(out.collections) >= 2  # Heart-rate and weight overlays.
     # RR lines are stored as LineCollection objects.
     assert any(isinstance(c, matplotlib.collections.LineCollection) for c in out.collections)
+
+
+def test_scatter_plot_multi_month_title(df_heart_multi_month, df_weight_small):
+    """Generate a scatter plot spanning multiple months."""
+    _, ax = plt.subplots()
+    out = generate_scatter_plot(df_heart_multi_month, df_weight_small, ax)
+
+    assert out is ax
+    assert " - " in out.get_title()
+    assert "2025 January" in out.get_title()
+    assert "2025 February" in out.get_title()
 
 
 # ---------------------------------------------------------

@@ -17,6 +17,9 @@ This means rr2graph runs on:
 - GitHub Codespaces
 - any Docker-enabled system
 
+![rr2graph at Docker Container](https://github.com/hlotze/rr2graph/blob/main/examples/rr2graph_at_container.png?raw=true)
+
+
 ## ✅ Requirements
 
 To use rr2graph via Docker, you need:
@@ -215,57 +218,3 @@ This is intentional because containers should:
 - be stateless
 - be reproducible
 - be disposable
-
-
-```text
-                 +-----------------------------+
-                 |     Docker Image Cache      |
-                 |  ghcr.io/hlotze/rr2graph   |
-                 +--------------+--------------+
-                                |
-                                |  (first run only)
-                                v
-                     [Image stored locally]
-                                |
-                                v
-+---------------------------------------------------------------+
-|                       docker run ...                          |
-+---------------------------------------------------------------+
-                                |
-                                v
-                    +-----------------------+
-                    |   New Container       |
-                    |   (ephemeral)         |
-                    +----------+------------+
-                               |
-                               |  Mount: -v $(pwd):/data
-                               v
-                +-----------------------------------+
-                |   Host directory (persistent)     |
-                |   ./rr.xlsx, ./config.yaml, out   |
-                +-----------------------------------+
-                               ^
-                               |
-                               |  Working dir: -w /data
-                               |
-                    +----------+------------+
-                    |   rr2graph CLI runs   |
-                    |   reads /data/*       |
-                    |   writes /data/*      |
-                    +----------+------------+
-                               |
-                               v
-                    +-----------------------+
-                    |   Container exits     |
-                    |   (exit 0)            |
-                    +----------+------------+
-                               |
-                               |  --rm
-                               v
-                    [Container removed]
-                               |
-                               v
-+---------------------------------------------------------------+
-|       Data remains safely on the host system                  |
-+---------------------------------------------------------------+
-```

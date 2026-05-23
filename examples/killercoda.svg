@@ -1,0 +1,45 @@
+<svg width="24" height="24" viewBox="0 0 24 24"
+     xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Background -->
+  <rect width="24" height="24" rx="4"
+        fill="#111827"/>
+
+  <!-- Terminal frame -->
+  <rect x="4" y="5" width="16" height="11"
+        rx="2"
+        fill="#1F2937"
+        stroke="#4B5563"
+        stroke-width="1"/>
+
+  <!-- Prompt arrow -->
+  <path d="M7 9 L10 11 L7 13"
+        fill="none"
+        stroke="#22C55E"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+  <!-- Cursor line -->
+  <line x1="12" y1="11" x2="16" y2="11"
+        stroke="#22C55E"
+        stroke-width="1.5"
+        stroke-linecap="round"/>
+
+  <!-- Simplified skull -->
+  <circle cx="12" cy="19" r="2.2"
+          fill="#E5E7EB"/>
+
+  <circle cx="11.2" cy="18.5" r="0.35"
+          fill="#111827"/>
+
+  <circle cx="12.8" cy="18.5" r="0.35"
+          fill="#111827"/>
+
+  <path d="M11 20 Q12 20.8 13 20"
+        fill="none"
+        stroke="#111827"
+        stroke-width="0.7"
+        stroke-linecap="round"/>
+
+</svg>

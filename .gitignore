@@ -63,7 +63,7 @@ man/*.gz
 
 # Misc project files
 DockerFile_*
-__NOTES.md
+/NOTES/
 
 # ============================================
 # OS / IDE

@@ -19,6 +19,54 @@ This means rr2graph runs on:
 
 ![rr2graph at Docker Container](https://github.com/hlotze/rr2graph/blob/main/examples/rr2graph_at_container.png?raw=true)
 
+## ![OCI](examples/oci.svg) OCI-conformity
+
+The Docker-Image was build at GHCR (GitHub Container Repository at GitHub >> Packages) and follow OCI-comformity (Open Container Initiative), it runs with
+
+- 🐳 Docker,
+- 🦭 Podman,
+- ☸️ Kubernetes and
+
+you may check this with:
+
+```bash
+docker manifest inspect ghcr.io/hlotze/rr2graph
+```
+
+and will get:
+
+```text
+{
+   "schemaVersion": 2,
+   "mediaType": "application/vnd.docker.distribution.manifest.list.v2+json",
+   "manifests": [
+      {
+         "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+...
+         "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+         }
+      },
+      {
+         "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+...
+         "platform": {
+            "architecture": "arm64",
+            "os": "linux"
+         }
+      }
+   ]
+}
+```
+
+where `...manifest.list.v2-json` is your hint about OCI-conformity.
+
+`Docker` is used throughout this documentation for simplicity, but all examples were designed to work with `Podman` as well.
+
+## ![OCI](examples/killercoda.svg) Killercoda Playgrounds
+
+For initial experiments with `docker`, <https://killercoda.com/playgrounds/> can be used directly with the commands shown at [Quickstart](#-quickstart-docker).
 
 ## ✅ Requirements
 
@@ -32,7 +80,7 @@ To use rr2graph via Docker, you need:
    - Windows
    - Linux
 
-   Download: https://www.docker.com/products/docker-desktop/
+   Download: <https://www.docker.com/products/docker-desktop/>
 
 2. Internet connection
 
@@ -66,7 +114,7 @@ This generates: `test_rr_data.xlsx`.
 Explanation of the command:
 
 | Step | Command part | Explanation |
-|------|-------------|-------------|
+| ------ | ------------- | ------------- |
 | 1 | `docker run --rm \` | starts a new Docker container from an image and removes it after execution |
 | 2 | `-v $(pwd):/data \` | mounts the current host directory into the container at `/data` |
 | 3 | `-w /data \` | sets the working directory inside the container |
@@ -99,7 +147,7 @@ The generated plots can be found in: `plots/test/`
 Explanation of the command:
 
 | Step | Command part | Explanation |
-|------|-------------|-------------|
+| ------ | ------------- | ------------- |
 | 1–4 | as above | base Docker setup |
 | 5 | `-e /data/test_rr_data.xlsx \` | input Excel file |
 | 6 | `-n 3 \` | number of months to display |
@@ -124,7 +172,7 @@ docker run --rm \
 Explanation:
 
 | Step | Command part | Explanation |
-|------|-------------|-------------|
+| ------ | ------------- | ------------- |
 | 1–4 | as above | base Docker setup |
 | 5 | `-e /data/rr_data.xlsx \` | user-provided Excel file |
 | 6 | `-n 3 \` | number of months to display |

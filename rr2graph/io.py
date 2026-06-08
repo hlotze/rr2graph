@@ -105,7 +105,7 @@ def parse_excel_date(val: object) -> Optional[pd.Timestamp]:
         return pd.to_datetime(val, errors="coerce")
 
     except Exception:  # pragma: no cover --- IGNORE ---
-        return None  # pragma: no cover --- IGNORE ---
+        return None    # pragma: no cover --- IGNORE ---
 
 
 # ---------------------------------------------------------

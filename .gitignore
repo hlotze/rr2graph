@@ -45,11 +45,14 @@ htmlcov/
 /docs/
 
 # others
-*rr_data.xlsx
-*config*.yaml
+/*rr_data.xlsx
+/*config*.yaml
 
 # Jupyter / experiments
-*.ipynb
+# *.ipynb
+my_tests.ipynb
+rr_corr.ipynb
+test_rr2graph.ipynb
 .ipynb_checkpoints/
 
 # Logs

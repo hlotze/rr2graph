@@ -1,0 +1,5 @@
+excel: "test_rr_data.xlsx"
+
+num_of_months: 3
+
+output: "plots/"
